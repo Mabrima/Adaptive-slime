@@ -2,52 +2,78 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class UnitBase : MonoBehaviour
+[CreateAssetMenu(menuName = "RPG/UnitBase")]
+public class UnitBase : ScriptableObject
 {
-    protected PassiveSkillBase[] passives;
-    protected ActivatableSkillBase[] activatables;
-    protected int maxHealth = 100;
-    protected int currentHealth = 100;
-    protected int attackPower = 10;
-    protected int agility = 10;
-    protected int defence = 10;
+    [Header("Skills")]
+    [SerializeField]
+    protected List<PassiveSkillBase> passives;
+    [SerializeField]
+    protected List<ActivatableSkillBase> activatables;
+    [Header("Stats")]
+    public float maxHealth = 100;
+    public float currentHealth = 100;
+    public float attackPower = 10;
+    public float agility = 10;
+    public float defence = 10;
 
-    protected float pierceResistance = 1;
-    protected float slashResistance = 1;
-    protected float crusheResistance = 1;
+    public float pierceResistance = 1;
+    public float slashResistance = 1;
+    public float crushResistance = 1;
+    public float bleedResistance = 1;
+    public float poisonResistance = 1;
 
-    protected int poisonedDmg = 0;
-    protected int poisonedDuration = 0;
-    protected int bleedingDmg = 0;
-    protected int bleedingDuration = 0;
+    [Header("StatusEffects")]
+    public float poisonedDmg = 0;
+    public float poisonedDuration = 0;
+    public float bleedingDmg = 0;
+    public float bleedingDuration = 0;
 
-    public abstract void DoCombat();
+    [Header("Special Bonuses")]
+    public int poisionBonusDuration = 0;
+    public int bleedBonusDuration = 0;
 
-    public virtual PassiveSkillBase[] GetPassives()
+    void Start()
+    {
+        ActivatePassives();
+    }
+
+    public virtual void DoCombat()
+    {
+        activatables[Random.Range(0, activatables.Count)].UseSkill();
+    }
+
+    public virtual void ActivatePassives()
+    {
+        foreach (PassiveSkillBase passive in passives)
+        {
+            passive.GiveBonus(this);
+        }
+    }
+
+    public virtual List<PassiveSkillBase> GetPassives()
     {
         return passives;
     }
 
-    public virtual ActivatableSkillBase[] GetActivatables()
+    public virtual List<ActivatableSkillBase> GetActivatables()
     {
         return activatables;
     }
 
-    protected abstract void SetBaseSkills();
-
-    public void SetPoisoned(int dmg, int duration)
+    public void SetPoisoned(float dmg, int duration)
     {
         poisonedDmg = dmg;
         poisonedDuration = duration;
     }
 
-    public void SetBleeding(int dmg, int duration)
+    public void SetBleeding(float dmg, int duration)
     {
         bleedingDmg = dmg;
         bleedingDuration = duration;
     }
 
-    public void Defend(int otherDmg, GameManager.DmgTypes dmgType, float attackAccuracy, int otherAgility, bool trueHit = false)
+    public void Defend(float otherDmg, GameManager.DmgTypes dmgType, float attackAccuracy, float otherAgility, bool trueHit = false)
     {
         if (trueHit)
         {
@@ -59,21 +85,21 @@ public abstract class UnitBase : MonoBehaviour
         }
     }
 
-    public void TakeDmg(int otherDmg, GameManager.DmgTypes dmgType)
+    public void TakeDmg(float otherDmg, GameManager.DmgTypes dmgType)
     {
         switch (dmgType)
         {
             case GameManager.DmgTypes.CRUSH:
-                currentHealth = (int) (currentHealth - Mathf.Abs(otherDmg) * crusheResistance);
+                currentHealth = currentHealth - Mathf.Abs(otherDmg) * crushResistance;
                 break;
             case GameManager.DmgTypes.PIERCE:
-                currentHealth = (int) (currentHealth - Mathf.Abs(otherDmg) * pierceResistance);
+                currentHealth = currentHealth - Mathf.Abs(otherDmg) * pierceResistance;
                 break;
             case GameManager.DmgTypes.SLASH:
-                currentHealth = (int) (currentHealth - Mathf.Abs(otherDmg) * slashResistance);
+                currentHealth = currentHealth - Mathf.Abs(otherDmg) * slashResistance;
                 break;
             default:
-                currentHealth = (int)(currentHealth - Mathf.Abs(otherDmg));
+                currentHealth = currentHealth - Mathf.Abs(otherDmg);
                 break;
         }
 

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e18c829859bb4444894c3041d772f58, type: 3}
+  m_Name: Scaled
+  m_EditorClassIdentifier: 
+  skillName: Scaled
+  description: Makes the wearer less susceptible to slashing and piercing attacks.
+    As well as a small raw defence boost.
+  attackPower: 0
+  attackPowerPercent: 1
+  agility: 0
+  agilityPercent: 1
+  defence: 2
+  defencePercent: 1.1
+  health: 0
+  healthPercent: 1
+  crushResistance: 1
+  slashResistance: 0.8
+  pierceResistance: 0.8
+  bleedResistance: 1
+  poisonResistance: 1
+  bleedDurationBonus: 0
+  poisonDurationBonus: 0

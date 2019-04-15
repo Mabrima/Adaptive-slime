@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3559757e77cd88f4bb824bf789dc333e, type: 3}
+  m_Name: Bite
+  m_EditorClassIdentifier: 
+  skillName: Bite
+  description: Delivers a basic bite, hurting the enemy.
+  baseDmg: 12
+  scalingDmg: 1
+  basePoison: 0
+  scalingPoison: 0
+  poisonDuration: 0
+  baseBleed: 0
+  scalingBleed: 0
+  bleedDuration: 0
+  dmgType: 2
+  target: 1
+  crushResistance: 1
+  slashResistance: 1
+  pierceResistance: 1
+  bleedResistance: 1
+  poisonResistance: 1
+  baseHeal: 0
+  scalingHeal: 0
+  baseHealOverTime: 0
+  scalingHealOverTime: 0

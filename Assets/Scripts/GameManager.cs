@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     Player player;
+    public Text rollingText;
     public static GameManager instance;
+    public State currentState = State.NULL;
 
     private void Awake()
     {
@@ -29,7 +32,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
-    }
+        rollingText = GameObject.Find("World Text").GetComponent<Text>();
+     }
 
     void FindEnemy()
     {

@@ -2,21 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : UnitBase
+public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        SetBaseSkills();
-    }
+    public UnitBase unitBase;
 
-    protected override void SetBaseSkills()
-    {
 
-    }
-
-    public override void DoCombat()
-    {
-
-    }
 }

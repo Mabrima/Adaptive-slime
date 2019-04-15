@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4fd98169555184e87757a61efb779c, type: 3}
+  m_Name: Snake
+  m_EditorClassIdentifier: 
+  passives:
+  - {fileID: 11400000, guid: 858f97d38d057734ea793c641522fe7e, type: 2}
+  activatables:
+  - {fileID: 11400000, guid: de622ab7475196841a84e01dcc1180d3, type: 2}
+  - {fileID: 11400000, guid: c9aabf8459479104591ea3ceab1b0590, type: 2}
+  maxHealth: 60
+  currentHealth: 60
+  attackPower: 12
+  agility: 22
+  defence: 12
+  pierceResistance: 1
+  slashResistance: 1
+  crushResistance: 1
+  bleedResistance: 1
+  poisonResistance: 1
+  poisonedDmg: 0
+  poisonedDuration: 0
+  bleedingDmg: 0
+  bleedingDuration: 0
+  poisionBonusDuration: 0
+  bleedBonusDuration: 0

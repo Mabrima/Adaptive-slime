@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour
     public void CheckKeys()
     {
 
-        if (GameManager.instance.state == GameManager.GameControllerState.GAME)
+        if (GameManager.instance.currentState == GameManager.State.COMBAT)
         {
             
         }
