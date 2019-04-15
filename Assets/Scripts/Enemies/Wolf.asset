@@ -16,6 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d22edd86d89c72447b412d83eb2ff55c, type: 2}
   activatables:
   - {fileID: 11400000, guid: c9aabf8459479104591ea3ceab1b0590, type: 2}
+  - {fileID: 11400000, guid: 3d17a3e19504024418f15c1b6203f9d3, type: 2}
   maxHealth: 80
   currentHealth: 80
   attackPower: 12
@@ -30,5 +31,8 @@ MonoBehaviour:
   poisonedDuration: 0
   bleedingDmg: 0
   bleedingDuration: 0
+  healingOverTimeAmount: 0
+  healingDuration: 0
   poisionBonusDuration: 0
   bleedBonusDuration: 0
+  healingBonusDuration: 0

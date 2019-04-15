@@ -17,37 +17,37 @@ public class ActivatableSkillBase : ScriptableObject
     public float scalingDmg = 0;
     public float basePoison = 0;
     public float scalingPoison = 0;
-    public float poisonDuration = 0;
+    public int poisonDuration = 0;
     public float baseBleed = 0;
     public float scalingBleed = 0;
-    public float bleedDuration = 0;
+    public int bleedDuration = 0;
     public GameManager.DmgTypes dmgType = 0;
 
     [Header("Target")]
     public Target target = 0;
 
     [Header("Self Modification")]
-    public float crushResistance = 1;
-    public float slashResistance = 1;
-    public float pierceResistance = 1;
-    public float bleedResistance = 1;
-    public float poisonResistance = 1;
+    //public float crushResistance = 1;
+    //public float slashResistance = 1;
+    //public float pierceResistance = 1;
+    //public float bleedResistance = 1;
+    //public float poisonResistance = 1;
     public float baseHeal = 0;
     public float scalingHeal = 0;
     public float baseHealOverTime = 0;
     public float scalingHealOverTime = 0;
+    public int healDuration = 0;
 
-
-
-
-    public virtual void UseSkill()
+    public void UseSelfEffect(UnitBase unit)
     {
-
+        unit.Heal(baseHeal + scalingHeal * unit.attackPower);
+        unit.healingDuration = healDuration;
+        unit.healingOverTimeAmount = baseHealOverTime + scalingHealOverTime * unit.attackPower;
     }
 
-    public virtual void CombineSkill()
-    {
+    //public virtual void CombineSkill()
+    //{
 
-    }
+    //}
     
 }

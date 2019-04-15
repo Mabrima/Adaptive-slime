@@ -31,5 +31,8 @@ MonoBehaviour:
   poisonedDuration: 0
   bleedingDmg: 0
   bleedingDuration: 0
+  healingOverTimeAmount: 0
+  healingDuration: 0
   poisionBonusDuration: 0
   bleedBonusDuration: 0
+  healingBonusDuration: 0
