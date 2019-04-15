@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ram
   m_EditorClassIdentifier: 
   skillName: Ram
-  description: Ram the enemy with your body, inflicting dmg to both you and your opponent
+  description: Ram the enemy with your body, inflicting dmg to your opponent
   baseDmg: 16
   scalingDmg: 0.4
   basePoison: 0
@@ -24,12 +24,8 @@ MonoBehaviour:
   bleedDuration: 0
   dmgType: 3
   target: 1
-  crushResistance: 1
-  slashResistance: 1
-  pierceResistance: 1
-  bleedResistance: 1
-  poisonResistance: 1
   baseHeal: 0
   scalingHeal: 0
   baseHealOverTime: 0
   scalingHealOverTime: 0
+  healDuration: 0
