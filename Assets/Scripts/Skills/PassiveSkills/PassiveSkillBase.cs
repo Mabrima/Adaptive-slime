@@ -80,10 +80,6 @@ public class PassiveSkillBase : ScriptableObject
     }
 
 
-    //extra if time
-    public void CombineSkill()
-    {
 
-    }
   
 }

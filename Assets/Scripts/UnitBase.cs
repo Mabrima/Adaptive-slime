@@ -97,24 +97,24 @@ public class UnitBase : ScriptableObject
         GameManager.instance.HealPrint(healAmount, name);
     }
 
-    public void Defend(float otherDmg, GameManager.DmgTypes dmgType, float otherAgility, string otherName, bool trueHit = false)
+    public void Defend(float otherDmg, GameManager.DmgTypes dmgType, float otherAgility, string skillName, string otherName, bool trueHit = false)
     {
         if (trueHit)
         {
             TakeDmg(otherDmg, dmgType, otherName);
-            GameManager.instance.CombatPrint(otherDmg, true, otherName);
+            GameManager.instance.CombatPrint(otherDmg, true, otherName, skillName);
         }
         if (Random.Range(0, 1f) < (otherAgility / agility))
         {
-            TakeDmg(otherDmg, dmgType, otherName);
+            TakeDmg(otherDmg, dmgType, otherName, skillName);
         }
         else
         {
-            GameManager.instance.CombatPrint(otherDmg, false, otherName);
+            GameManager.instance.CombatPrint(otherDmg, false, otherName, skillName);
         }
     }
 
-    public void TakeDmg(float otherDmg, GameManager.DmgTypes dmgType, string otherName)
+    public void TakeDmg(float otherDmg, GameManager.DmgTypes dmgType, string otherName, string skillName = "")
     {
         float tempDmg;
         switch (dmgType)
@@ -122,22 +122,22 @@ public class UnitBase : ScriptableObject
             case GameManager.DmgTypes.CRUSH:
                 tempDmg = Mathf.Clamp(otherDmg - defence, 0, 9999) * crushResistance;
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName);
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
                 break;
             case GameManager.DmgTypes.PIERCE:
                 tempDmg = Mathf.Clamp(otherDmg - defence, 0, 9999) * pierceResistance;
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName);
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
                 break;
             case GameManager.DmgTypes.SLASH:
                 tempDmg = Mathf.Clamp(otherDmg - defence, 0, 9999) * slashResistance;
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName);
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
                 break;
             default:
                 tempDmg = otherDmg;
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName);
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
                 break;
         }
 

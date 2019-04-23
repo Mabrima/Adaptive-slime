@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3559757e77cd88f4bb824bf789dc333e, type: 3}
   m_Name: RendingBite
   m_EditorClassIdentifier: 
-  skillName: RendingBite
+  skillName: Rending Bite
   description: Delivers a bite that damages and bleeds the enemy over a 5 turns
   baseDmg: 10
   scalingDmg: 0.8

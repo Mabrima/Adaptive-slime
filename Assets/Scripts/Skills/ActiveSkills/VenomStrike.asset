@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3559757e77cd88f4bb824bf789dc333e, type: 3}
   m_Name: VenomStrike
   m_EditorClassIdentifier: 
-  skillName: VenomStrike
+  skillName: Venom Strike
   description: Strikes the enemy with poisoned fangs, inflicting severe poison dmg
     over 5 turns.
   baseDmg: 2
@@ -25,12 +25,8 @@ MonoBehaviour:
   bleedDuration: 0
   dmgType: 2
   target: 1
-  crushResistance: 1
-  slashResistance: 1
-  pierceResistance: 1
-  bleedResistance: 1
-  poisonResistance: 1
   baseHeal: 0
   scalingHeal: 0
   baseHealOverTime: 0
   scalingHealOverTime: 0
+  healDuration: 0

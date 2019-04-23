@@ -45,9 +45,6 @@ public class ActivatableSkillBase : ScriptableObject
         unit.healingOverTimeAmount = baseHealOverTime + scalingHealOverTime * unit.attackPower;
     }
 
-    //public virtual void CombineSkill()
-    //{
 
-    //}
     
 }

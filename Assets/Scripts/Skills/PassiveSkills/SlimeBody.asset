@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e18c829859bb4444894c3041d772f58, type: 3}
   m_Name: SlimeBody
   m_EditorClassIdentifier: 
-  skillName: SlimeBody
-  description: noDescription
+  skillName: Slime Body
+  description: A slimes body is fluid and can absorb almost all crush damage taken.
+    It also closes wounds quickly making bleed damage less threatening.
   attackPower: 0
   attackPowerPercent: 1
   agility: 0
@@ -22,10 +23,10 @@ MonoBehaviour:
   defencePercent: 1
   health: 0
   healthPercent: 1
-  crushResistance: 0.4
-  slashResistance: 1.1
-  pierceResistance: 1.2
-  bleedResistance: 1
+  crushResistance: 0.2
+  slashResistance: 1
+  pierceResistance: 1
+  bleedResistance: 0.1
   poisonResistance: 1
   bleedDurationBonus: 0
   poisonDurationBonus: 0

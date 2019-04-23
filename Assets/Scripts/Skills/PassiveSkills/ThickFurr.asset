@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e18c829859bb4444894c3041d772f58, type: 3}
-  m_Name: ToughHide
+  m_Name: ThickFurr
   m_EditorClassIdentifier: 
-  skillName: ToughHide
-  description: A tough hide helps reduce dmg taken from piercing and slash attacks
+  skillName: Reactive Slime Body
+  description: Reacts to incoming impulses hardening the area. Helps greatly reduce
+    incoming piercing damage.
   attackPower: 0
   attackPowerPercent: 1
   agility: 0
@@ -23,8 +24,8 @@ MonoBehaviour:
   health: 0
   healthPercent: 1
   crushResistance: 1
-  slashResistance: 0.6
-  pierceResistance: 0.8
+  slashResistance: 0.8
+  pierceResistance: 0.4
   bleedResistance: 1
   poisonResistance: 1
   bleedDurationBonus: 0

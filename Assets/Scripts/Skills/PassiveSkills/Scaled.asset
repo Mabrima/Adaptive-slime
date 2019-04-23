@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Scaled
   m_EditorClassIdentifier: 
   skillName: Scaled
-  description: Makes the wearer less susceptible to slashing and piercing attacks.
-    As well as a small raw defence boost.
+  description: A scaled exterior makes slashing attacks merely glance off you dealing
+    little damage.
   attackPower: 0
   attackPowerPercent: 1
   agility: 0
@@ -24,7 +24,7 @@ MonoBehaviour:
   health: 0
   healthPercent: 1
   crushResistance: 1
-  slashResistance: 0.8
+  slashResistance: 0.4
   pierceResistance: 0.8
   bleedResistance: 1
   poisonResistance: 1
