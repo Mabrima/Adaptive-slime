@@ -18,6 +18,11 @@ public class ButtonHoverOver : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (GameManager.instance.currentState != GameManager.State.PLAYER_TURN)
+        {
+            return;
+        }
+
         if (player == null)
         {
             player = FindObjectOfType<Player>();

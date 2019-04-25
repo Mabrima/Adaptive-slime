@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "RPG/UnitBase")]
 public class UnitBase : ScriptableObject
 {
+    [Header("Name")]
+    public string unitName;
     [Header("Skills")]
     [SerializeField]
     protected List<PassiveSkillBase> passives;
@@ -35,6 +37,8 @@ public class UnitBase : ScriptableObject
     public int poisionBonusDuration = 0;
     public int bleedBonusDuration = 0;
     public int healingBonusDuration = 0;
+
+    public enum Environment { FORREST, DESERT, JUNGLE, SEA, MOUNTAINS }
 
     void Start()
     {
@@ -75,26 +79,32 @@ public class UnitBase : ScriptableObject
     {
         if (healingDuration > 0)
         {
-            Heal(healingOverTimeAmount);
+            Heal(healingOverTimeAmount, "heal over time");
             healingDuration--;
         }
-        if (bleedingDuration > 0)
+        if (bleedingDuration > 0 && poisonedDuration > 0)
         {
-            TakeDmg(bleedingDmg, GameManager.DmgTypes.NULL, name + "s bleeding wound");
+            TakeDmg(bleedingDmg + poisonedDmg, GameManager.DmgTypes.NULL, unitName + "s corrupted blood");
+            bleedingDuration--;
+            poisonedDuration--;
+        }
+        else if (bleedingDuration > 0)
+        {
+            TakeDmg(bleedingDmg, GameManager.DmgTypes.BLEED, unitName + "s bleeding wound");
             bleedingDuration--;
         }
-        if (poisionBonusDuration > 0)
+        else if (poisonedDuration > 0)
         {
-            TakeDmg(poisonedDmg, GameManager.DmgTypes.NULL, name + "s poisioned body");
+            TakeDmg(poisonedDmg, GameManager.DmgTypes.POISON, unitName + "s poisioned body");
             poisonedDuration--;
         }
     }
 
-    public void Heal(float healAmount)
+    public void Heal(float healAmount, string skillname)
     {
         currentHealth += healAmount;
         currentHealth = currentHealth > maxHealth ? maxHealth : currentHealth;
-        GameManager.instance.HealPrint(healAmount, name);
+        GameManager.instance.HealPrint(healAmount, unitName, skillname);
     }
 
     public void Defend(float otherDmg, GameManager.DmgTypes dmgType, float otherAgility, string skillName, string otherName, bool trueHit = false)
@@ -131,6 +141,16 @@ public class UnitBase : ScriptableObject
                 break;
             case GameManager.DmgTypes.SLASH:
                 tempDmg = Mathf.Clamp(otherDmg - defence, 0, 9999) * slashResistance;
+                currentHealth = currentHealth - tempDmg;
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
+                break;
+            case GameManager.DmgTypes.POISON:
+                tempDmg = otherDmg * poisonResistance;
+                currentHealth = currentHealth - tempDmg;
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
+                break;
+            case GameManager.DmgTypes.BLEED:
+                tempDmg = otherDmg * bleedResistance;
                 currentHealth = currentHealth - tempDmg;
                 GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
                 break;

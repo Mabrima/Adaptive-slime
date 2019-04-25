@@ -43,12 +43,12 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < inactiveEquipablesButtons.transform.childCount; i++)
         {
-            Destroy(inactiveEquipablesButtons.transform.GetChild(0));
+            Destroy(inactiveEquipablesButtons.transform.GetChild(0).gameObject);
         }
 
         for (int i = 0; i < activeEquipablesButtons.transform.childCount; i++)
         {
-            Destroy(activeEquipablesButtons.transform.GetChild(0));
+            Destroy(activeEquipablesButtons.transform.GetChild(0).gameObject);
         }
 
         for (int i = 0; i < inactiveEquipables.Count; i++)
@@ -136,18 +136,28 @@ public class Player : MonoBehaviour
         unitBase.attackPower += unit.attackPower * 0.1f;
         unitBase.agility += unit.agility * 0.1f;
         unitBase.defence += unit.defence * 0.1f;
-        unitBase.Heal(unit.maxHealth * 0.2f);
+        unitBase.Heal(unit.maxHealth * 0.2f, "end of battle heal");
     }
 
     public void Readapting(PassiveSkillBase skillToSwap)
     {
+        if (hasReadapted)
+        {
+            GameManager.instance.worldText.text += '\n' + "You have already readapted this turn";
+            return;
+        }
+
         if (inactiveEquipables.Contains(skillToSwap))
         {
             unequipedSkillToSwap = skillToSwap;
+            GameManager.instance.worldText.text += '\n' + "Currently unequiped " + skillToSwap.skillName + " selected to swap";
+
         }
         else if (activeEquipables.Contains(skillToSwap))
         {
             equipedSkillToSwap = skillToSwap;
+            GameManager.instance.worldText.text += '\n' + "Currently equiped " + skillToSwap.skillName + " selected to swap";
+
         }
 
         if (unequipedSkillToSwap != null && equipedSkillToSwap != null)
@@ -166,7 +176,29 @@ public class Player : MonoBehaviour
 
             equipedSkillToSwap = null;
             unequipedSkillToSwap = null;
+            hasReadapted = true;
         }
+    }
+
+
+    public void TurnOffButtons()
+    {
+        for (int i = 0; i < activateablesButtons.transform.childCount; i++)
+        {
+            activateablesButtons.transform.GetChild(i).GetComponent<Button>().interactable = false;
+        }
+
+        for (int i = 0; i < inactiveEquipablesButtons.transform.childCount; i++)
+        {
+            inactiveEquipablesButtons.transform.GetChild(i).GetComponent<Button>().interactable = false;
+        }
+
+        for (int i = 0; i < activeEquipablesButtons.transform.childCount; i++)
+        {
+            activeEquipablesButtons.transform.GetChild(i).GetComponent<Button>().interactable = false;
+        }
+
+
     }
 
 }

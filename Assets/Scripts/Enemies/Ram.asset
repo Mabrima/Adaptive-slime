@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4fd98169555184e87757a61efb779c, type: 3}
   m_Name: Ram
   m_EditorClassIdentifier: 
+  unitName: Ram
   passives:
   - {fileID: 11400000, guid: d22edd86d89c72447b412d83eb2ff55c, type: 2}
   activatables:
   - {fileID: 11400000, guid: 4019451fcc6bf6e4685bfc7ea2481f3e, type: 2}
-  - {fileID: 11400000, guid: 3d17a3e19504024418f15c1b6203f9d3, type: 2}
   maxHealth: 80
   currentHealth: 80
   attackPower: 12

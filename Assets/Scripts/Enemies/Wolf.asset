@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4fd98169555184e87757a61efb779c, type: 3}
   m_Name: Wolf
   m_EditorClassIdentifier: 
+  unitName: Wolf
   passives:
   - {fileID: 11400000, guid: d22edd86d89c72447b412d83eb2ff55c, type: 2}
   activatables:

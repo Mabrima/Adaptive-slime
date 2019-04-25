@@ -16,7 +16,7 @@ MonoBehaviour:
   description: Strikes the enemy with poisoned fangs, inflicting severe poison dmg
     over 5 turns.
   baseDmg: 2
-  scalingDmg: 0.1
+  scalingDmg: 0.2
   basePoison: 6
   scalingPoison: 0.4
   poisonDuration: 5

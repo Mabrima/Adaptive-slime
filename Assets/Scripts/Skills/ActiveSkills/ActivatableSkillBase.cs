@@ -21,6 +21,7 @@ public class ActivatableSkillBase : ScriptableObject
     public float baseBleed = 0;
     public float scalingBleed = 0;
     public int bleedDuration = 0;
+    public int cooldown = 0;
     public GameManager.DmgTypes dmgType = 0;
 
     [Header("Target")]
@@ -40,7 +41,7 @@ public class ActivatableSkillBase : ScriptableObject
 
     public void UseSelfEffect(UnitBase unit)
     {
-        unit.Heal(baseHeal + scalingHeal * unit.attackPower);
+        unit.Heal(baseHeal + scalingHeal * unit.attackPower, skillName);
         unit.healingDuration = healDuration;
         unit.healingOverTimeAmount = baseHealOverTime + scalingHealOverTime * unit.attackPower;
     }
