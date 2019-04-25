@@ -147,12 +147,12 @@ public class UnitBase : ScriptableObject
             case GameManager.DmgTypes.POISON:
                 tempDmg = otherDmg * poisonResistance;
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
+                GameManager.instance.PoisonPrint(tempDmg, otherName);
                 break;
             case GameManager.DmgTypes.BLEED:
                 tempDmg = otherDmg * bleedResistance;
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
+                GameManager.instance.BleedPrint(tempDmg, otherName);
                 break;
             default:
                 tempDmg = otherDmg;
