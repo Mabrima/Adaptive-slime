@@ -84,18 +84,18 @@ public class UnitBase : ScriptableObject
         }
         if (bleedingDuration > 0 && poisonedDuration > 0)
         {
-            TakeDmg(bleedingDmg + poisonedDmg, GameManager.DmgTypes.NULL, unitName + "s corrupted blood");
+            TakeDmg(bleedingDmg + poisonedDmg, GameManager.DmgTypes.NULL, unitName);
             bleedingDuration--;
             poisonedDuration--;
         }
         else if (bleedingDuration > 0)
         {
-            TakeDmg(bleedingDmg, GameManager.DmgTypes.BLEED, unitName + "s bleeding wound");
+            TakeDmg(bleedingDmg, GameManager.DmgTypes.BLEED, unitName);
             bleedingDuration--;
         }
         else if (poisonedDuration > 0)
         {
-            TakeDmg(poisonedDmg, GameManager.DmgTypes.POISON, unitName + "s poisioned body");
+            TakeDmg(poisonedDmg, GameManager.DmgTypes.POISON, unitName);
             poisonedDuration--;
         }
     }
@@ -157,7 +157,7 @@ public class UnitBase : ScriptableObject
             default:
                 tempDmg = otherDmg;
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
+                GameManager.instance.CorruptedBloodPrint(tempDmg, otherName);
                 break;
         }
 

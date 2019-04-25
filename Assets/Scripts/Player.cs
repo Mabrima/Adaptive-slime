@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     {
         unitBase = Instantiate(unitBase);
 
-        SetPassives();
+        SetInitialPassives();
 
         InstantiateInitialButtons();
     }
@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     {
         for (int i = 0; i < unitBase.GetActivatables().Count; i++)
         {
-            Button tempButton = Instantiate(buttonBase, new Vector3(0, 90 - 35*i, 0), Quaternion.identity, activateablesButtons.transform);
+            Button tempButton = Instantiate(buttonBase, activateablesButtons.transform);
             tempButton.transform.localPosition = new Vector3(0, 90 - 35 * i, 0);
             tempButton.GetComponentInChildren<Text>().text = unitBase.GetActivatables()[i].skillName;
             tempButton.GetComponent<ButtonHoverOver>().activeHolder = unitBase.GetActivatables()[i];
@@ -61,14 +61,32 @@ public class Player : MonoBehaviour
 
         for (int i = 0; i < activeEquipables.Count; i++)
         {
-            Button tempButton = Instantiate(buttonBase, new Vector3(0, 90 - 35 * i, 0), Quaternion.identity, activeEquipablesButtons.transform);
+            Button tempButton = Instantiate(buttonBase, activeEquipablesButtons.transform);
             tempButton.transform.localPosition = new Vector3(0, 90 - 35 * i, 0);
             tempButton.GetComponentInChildren<Text>().text = activeEquipables[i].skillName;
             tempButton.GetComponent<ButtonHoverOver>().passiveHolder = activeEquipables[i];
         }
     }
 
-    void SetPassives()
+    private void AddActivatableButton(ActivatableSkillBase skill)
+    {
+        Button tempButton = Instantiate(buttonBase, activateablesButtons.transform);
+        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * activateablesButtons.transform.childCount, 0); 
+    }
+
+    private void AddActiveEquipButton(PassiveSkillBase skill)
+    {
+        Button tempButton = Instantiate(buttonBase, activeEquipablesButtons.transform);
+        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * activeEquipablesButtons.transform.childCount, 0);
+    }
+
+    private void AddInactiveEquipButton(PassiveSkillBase skill)
+    {
+        Button tempButton = Instantiate(buttonBase, inactiveEquipablesButtons.transform);
+        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * inactiveEquipablesButtons.transform.childCount, 0);
+    }
+
+    void SetInitialPassives()
     {
         foreach (PassiveSkillBase activePassive in activeEquipables)
         {
