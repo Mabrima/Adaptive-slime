@@ -22,7 +22,7 @@ MonoBehaviour:
   currentHealth: 60
   attackPower: 12
   agility: 22
-  defence: 12
+  defence: 8
   pierceResistance: 1
   slashResistance: 1
   crushResistance: 1

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -9,12 +10,8 @@ public class GameManager : MonoBehaviour
     public enum State { NULL, PLAYER_TURN, ENEMY_TURN, WORLD, DEALING_WITH_READAPT, GAME_OVER, END_OF_TURN }
 
     Player player;
-    public Text inputText;
     public Text descriptionText;
     public Text worldText;
-    public Text activePassivesText;
-    public Text inactivePassivesText;
-    public Text activatableAbilitiesText;
     public Text playerHealthText;
     public Text enemyHealthText;
 
@@ -22,6 +19,7 @@ public class GameManager : MonoBehaviour
     public State currentState = State.NULL;
     public EnemyBase[] enemies;
     public EnemyBase currentEnemy;
+    private int turn = 1;
 
     private void Awake()
     {
@@ -41,10 +39,17 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        GameStartup();
+    }
+
+    void GameStartup()
+    {
         player = FindObjectOfType<Player>();
-        enemies = FindObjectsOfType<EnemyBase>();
+        enemies = FindObjectsOfType<EnemyBase>(); //hail satan
         playerHealthText = GameObject.Find("PlayerHealth").GetComponent<Text>();
         enemyHealthText = GameObject.Find("EnemyHealth").GetComponent<Text>();
+        worldText = GameObject.Find("WorldText").GetComponent<Text>();
+        descriptionText = GameObject.Find("DescriptionText").GetComponent<Text>();
 
 
         FindNewEnemy();
@@ -54,29 +59,27 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            //reload
+            SceneManager.LoadScene(0);
+
+            Invoke("GameStartup", .1f);
         }
         //WIN/LOSE
-        if (currentState == State.PLAYER_TURN && player.unitBase.currentHealth <= 0)
+        if (currentState != State.GAME_OVER && currentEnemy.unitBase.currentHealth <= 0)
+        {
+            currentEnemy.ResetEnemy();
+            player.StealStats(currentEnemy.unitBase);
+            AttemptStealSkill();
+            FindNewEnemy();
+            turn = 1;
+            currentState = State.PLAYER_TURN;
+        }
+        if (currentState != State.GAME_OVER && player.unitBase.currentHealth <= 0)
         {
             player.TurnOffButtons();
             worldText.text += '\n' + "Game over, you have perished";
             currentState = State.GAME_OVER;
         }
-        if (currentState == State.ENEMY_TURN && currentEnemy.unitBase.currentHealth <= 0)
-        {
-            if (Random.Range(0,2) > 1)
-            {
-                AttemptStealActive();
-            }
-            else
-            {
-                AttemptStealEquip();
-            }
-            player.StealStats(currentEnemy.unitBase);
-            FindNewEnemy();
-            currentState = State.PLAYER_TURN;
-        }
+        
 
         ////PLAYER COMBAT
         //wait for player input to trigger PlayerUseSkill()
@@ -92,29 +95,55 @@ public class GameManager : MonoBehaviour
         //END OF TURN
         if (currentState == State.END_OF_TURN)
         {
-            worldText.text += '\n' + "End of turn"; 
+            worldText.text += '\n' + "End of turn " + turn; 
             currentEnemy.unitBase.EndOfTurnEffects();
             player.unitBase.EndOfTurnEffects();
-            playerHealthText.text = "PlayerHealth: " + player.unitBase.currentHealth.ToString();
-            enemyHealthText.text = "EnemyHealth: " + currentEnemy.unitBase.currentHealth.ToString();
+            playerHealthText.text = "PlayerHealth: " + (int)player.unitBase.currentHealth;
+            enemyHealthText.text = "EnemyHealth: " + (int)currentEnemy.unitBase.currentHealth;
             player.hasReadapted = false;
 
+            player.unitBase.DecrementCooldowns();
+            currentEnemy.unitBase.DecrementCooldowns();
+            player.UpdateButtonCooldownText();
+            turn++;
+
             currentState = State.PLAYER_TURN;
-            worldText.text += '\n' + "Start of turn";
+        }
+    }
+
+    private void AttemptStealSkill()
+    {
+        if (Random.Range(0, 2) > 1)
+        {
+            if (!AttemptStealActive())
+                AttemptStealEquip();
+        }
+        else
+        {
+            if (!AttemptStealEquip())
+                AttemptStealActive();
         }
     }
 
     private bool AttemptStealActive()
     {
-        foreach (ActivatableSkillBase skill in currentEnemy.unitBase.GetActivatables())
+        bool notKnownSkill = true;
+        foreach (ActivatableSkillBase enemySkill in currentEnemy.unitBase.GetActivatables())
         {
-            if (!player.unitBase.GetActivatables().Contains(skill))
+            foreach (ActivatableSkillBase playerSkill in player.unitBase.GetActivatables())
             {
-                if (Random.Range(0, 2) > 0)
+                if (enemySkill.skillName == playerSkill.skillName)
                 {
-                    player.unitBase.GetActivatables().Add(skill);
-                    return true;
+                    notKnownSkill = false;
+                    break;
                 }
+            }
+            if (notKnownSkill && Random.Range(0, 2) > 0)
+            {
+                player.unitBase.AddSkillToActivatableSkills(Instantiate(enemySkill));
+                
+                player.AddActivatableButton(enemySkill);
+                return true;
             }
         }
         return false;
@@ -122,16 +151,23 @@ public class GameManager : MonoBehaviour
 
     private bool AttemptStealEquip()
     {
-        foreach (PassiveSkillBase skill in currentEnemy.unitBase.GetPassives())
+        bool notKnownSkill = true;
+        foreach (PassiveSkillBase enemySkill in currentEnemy.unitBase.GetPassives())
         {
-            if (!player.unitBase.GetPassives().Contains(skill))
+            foreach (PassiveSkillBase playerSkill in player.unitBase.GetPassives())
             {
-                if (Random.Range(0, 2) > 0)
+                if (playerSkill.skillName != enemySkill.skillName)
                 {
-                    player.unitBase.GetPassives().Add(skill);
-                    player.inactiveEquipables.Add(skill);
-                    return true;
+                    notKnownSkill = false;
+                    break;
                 }
+            }
+            if (notKnownSkill && Random.Range(0, 2) > 0)
+            {
+                player.unitBase.GetPassives().Add(enemySkill);
+                player.inactiveEquipables.Add(enemySkill);
+                player.AddInactiveEquipButton(enemySkill);
+                return true;
             }
         }
         return false;
@@ -139,6 +175,12 @@ public class GameManager : MonoBehaviour
 
     public void PlayerUseSkill(ActivatableSkillBase skill)
     {
+        if (skill.cooldownTimer > 0)
+        {
+            worldText.text += '\n' + "That skill is still on cooldown";
+            return;
+        }
+        worldText.text = "";
         UseSkill(skill, player.unitBase, currentEnemy.unitBase);
         currentState = State.ENEMY_TURN;
     }
@@ -150,29 +192,30 @@ public class GameManager : MonoBehaviour
             if (skill.poisonDuration > 0)
             {
                 opposingUnit.poisonedDuration = skill.poisonDuration;
-                opposingUnit.poisonedDmg = skill.basePoison + skill.scalingPoison * usingUnit.attackPower;
+                opposingUnit.poisonedDmg = skill.basePoison + skill.scalingPoison * usingUnit.abilityPower;
             }
             if (skill.bleedDuration > 0)
             {
                 opposingUnit.bleedingDuration = skill.bleedDuration;
-                opposingUnit.bleedingDmg = skill.baseBleed + skill.scalingBleed * usingUnit.attackPower;
+                opposingUnit.bleedingDmg = skill.baseBleed + skill.scalingBleed * usingUnit.abilityPower;
             }
             if (skill.baseDmg > 0)
             {
-                opposingUnit.Defend(skill.baseDmg + skill.scalingDmg * usingUnit.attackPower, skill.dmgType, opposingUnit.agility, skill.skillName, usingUnit.unitName);
+                opposingUnit.Defend(skill.baseDmg + skill.scalingDmg * usingUnit.abilityPower, skill.dmgType, skill.skillName, usingUnit.unitName);
             }
 }
         if (skill.target == ActivatableSkillBase.Target.SELF)
         {
             skill.UseSelfEffect(usingUnit);
         }
+
+        usingUnit.SetSkillOnCooldown(skill);
     }
 
     //MOSTLY FINE TO KEEP
     public void FindNewEnemy()
     {
         currentEnemy = enemies[Random.Range(0, enemies.Length)];
-        currentEnemy.unitBase.currentHealth = currentEnemy.unitBase.maxHealth;
         worldText.text += '\n' + "You face a " + currentEnemy.unitBase.unitName;
         enemyHealthText.text = "EnemyHealth: " + currentEnemy.unitBase.currentHealth.ToString();
     }
@@ -185,28 +228,30 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            worldText.text += '\n' + name + " used " + skillName + " it <color=red>dealt</color> " + dmg + " dmg";
+            worldText.text += '\n' + name + " used " + skillName + " it <color=red>dealt</color> " + (int)dmg + " dmg";
         }
     }
 
     public void HealPrint(float healAmount, string name, string skillName)
     {
-         worldText.text += '\n' + name + " <color=green>Healed</color> " + healAmount + " from " + skillName;
+         worldText.text += '\n' + name + " <color=green>Healed</color> " + (int)healAmount + " from " + skillName;
     }
 
     public void CorruptedBloodPrint(float dmg, string name)
     {
-        worldText.text += '\n' + name + " Poison mixes with the bleeding causing a <color=purple>corrupted blood</color> hemorrhage dealing " + dmg + " dmg";
+        worldText.text += '\n' + name + " Poison mixes with the bleeding causing a <color=purple>corrupted blood</color> hemorrhage dealing " + (int)dmg + " dmg";
     }
 
     public void BleedPrint(float dmg, string name)
     {
-        worldText.text += '\n' + name + " <color=red>bleed for</color> " + dmg + " dmg";
+        worldText.text += '\n' + name + " <color=red>bleed for</color> " + (int)dmg + " dmg";
     }
 
     public void PoisonPrint(float dmg, string name)
     {
-        worldText.text += '\n' + name + " suffers " + dmg + " dmg from the <color=#56ff23>poison</color>";
+        worldText.text += '\n' + name + " suffers " + (int)dmg + " dmg from the <color=#56ff23>poison</color>";
     }
+
+
 
 }

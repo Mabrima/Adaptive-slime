@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         unitBase = Instantiate(unitBase);
+        unitBase.Initialize();
 
         SetInitialPassives();
 
@@ -68,22 +69,28 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void AddActivatableButton(ActivatableSkillBase skill)
+    public void AddActivatableButton(ActivatableSkillBase skill)
     {
         Button tempButton = Instantiate(buttonBase, activateablesButtons.transform);
-        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * activateablesButtons.transform.childCount, 0); 
+        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (activateablesButtons.transform.childCount-1), 0);
+        tempButton.GetComponentInChildren<Text>().text = skill.skillName;
+        tempButton.GetComponent<ButtonHoverOver>().activeHolder = skill;
     }
 
-    private void AddActiveEquipButton(PassiveSkillBase skill)
+    public void AddActiveEquipButton(PassiveSkillBase skill)
     {
         Button tempButton = Instantiate(buttonBase, activeEquipablesButtons.transform);
-        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * activeEquipablesButtons.transform.childCount, 0);
+        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (activeEquipablesButtons.transform.childCount-1), 0);
+        tempButton.GetComponentInChildren<Text>().text = skill.skillName;
+        tempButton.GetComponent<ButtonHoverOver>().passiveHolder = skill;
     }
 
-    private void AddInactiveEquipButton(PassiveSkillBase skill)
+    public void AddInactiveEquipButton(PassiveSkillBase skill)
     {
         Button tempButton = Instantiate(buttonBase, inactiveEquipablesButtons.transform);
-        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * inactiveEquipablesButtons.transform.childCount, 0);
+        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (inactiveEquipablesButtons.transform.childCount-1), 0);
+        tempButton.GetComponentInChildren<Text>().text = skill.skillName;
+        tempButton.GetComponent<ButtonHoverOver>().passiveHolder = skill;
     }
 
     void SetInitialPassives()
@@ -151,9 +158,9 @@ public class Player : MonoBehaviour
     public void StealStats(UnitBase unit)
     {
         unitBase.maxHealth += unit.maxHealth * 0.1f;
-        unitBase.attackPower += unit.attackPower * 0.1f;
-        unitBase.agility += unit.agility * 0.1f;
+        unitBase.abilityPower += unit.abilityPower * 0.1f;
         unitBase.defence += unit.defence * 0.1f;
+
         unitBase.Heal(unit.maxHealth * 0.2f, "end of battle heal");
     }
 
@@ -169,13 +176,11 @@ public class Player : MonoBehaviour
         {
             unequipedSkillToSwap = skillToSwap;
             GameManager.instance.worldText.text += '\n' + "Currently unequiped " + skillToSwap.skillName + " selected to swap";
-
         }
         else if (activeEquipables.Contains(skillToSwap))
         {
             equipedSkillToSwap = skillToSwap;
             GameManager.instance.worldText.text += '\n' + "Currently equiped " + skillToSwap.skillName + " selected to swap";
-
         }
 
         if (unequipedSkillToSwap != null && equipedSkillToSwap != null)
@@ -215,8 +220,17 @@ public class Player : MonoBehaviour
         {
             activeEquipablesButtons.transform.GetChild(i).GetComponent<Button>().interactable = false;
         }
-
-
     }
 
+    public void UpdateButtonCooldownText()
+    {
+        List<ActivatableSkillBase> tempSkills = unitBase.GetActivatables();
+        for (int i = 0; i < unitBase.GetActivatables().Count; i++)
+        {
+            if (tempSkills[i].cooldownTimer > 0)
+                activateablesButtons.transform.GetChild(i).GetComponentInChildren<Text>().text = tempSkills[i].skillName + " (" + tempSkills[i].cooldownTimer + ")";
+            else
+                activateablesButtons.transform.GetChild(i).GetComponentInChildren<Text>().text = tempSkills[i].skillName;
+        }
+    }
 }

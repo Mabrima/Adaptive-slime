@@ -10,15 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e18c829859bb4444894c3041d772f58, type: 3}
-  m_Name: ThickFurr
+  m_Name: ThickFur
   m_EditorClassIdentifier: 
-  skillName: Thick furr
+  skillName: Thick fur
   description: Provides some general defence but no specific resistance.
-  attackPower: 0
-  attackPowerPercent: 1
-  agility: 0
-  agilityPercent: 1
-  defence: 10
+  abilityPower: 0
+  abilityPowerPercent: 1
+  defence: 6
   defencePercent: 1.1
   health: 0
   healthPercent: 1

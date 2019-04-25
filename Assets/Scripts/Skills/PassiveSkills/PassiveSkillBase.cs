@@ -6,16 +6,14 @@ using UnityEngine;
 public class PassiveSkillBase : ScriptableObject
 {
 
-    [Header("Dmg Stats")]
+    [Header("Name and description")]
     public string skillName = "unNamed";
     public string description = "noDescription";
 
 
     [Header("Stats")]
-    public float attackPower = 0;
-    public float attackPowerPercent = 1;
-    public float agility = 0;
-    public float agilityPercent = 1;
+    public float abilityPower = 0;
+    public float abilityPowerPercent = 1;
     public float defence = 0;
     public float defencePercent = 1;
     public float health = 0;
@@ -35,10 +33,8 @@ public class PassiveSkillBase : ScriptableObject
 
     public void GiveBonus(UnitBase unit)
     {
-        unit.attackPower += attackPower;
-        unit.attackPower *= attackPowerPercent;
-        unit.agility += agility;
-        unit.agility *= agilityPercent;
+        unit.abilityPower += abilityPower;
+        unit.abilityPower *= abilityPowerPercent;
         unit.defence += defence;
         unit.defence *= defencePercent;
         unit.maxHealth += health;
@@ -58,10 +54,8 @@ public class PassiveSkillBase : ScriptableObject
 
     public void RemoveBonus(UnitBase unit)
     {
-        unit.attackPower -= attackPower;
-        unit.attackPower /= attackPowerPercent;
-        unit.agility -= agility;
-        unit.agility /= agilityPercent;
+        unit.abilityPower -= abilityPower;
+        unit.abilityPower /= abilityPowerPercent;
         unit.defence -= defence;
         unit.defence /= defencePercent;
         unit.maxHealth -= health;
@@ -79,7 +73,4 @@ public class PassiveSkillBase : ScriptableObject
         unit.bleedBonusDuration -= bleedDurationBonus;
     }
 
-
-
-  
 }

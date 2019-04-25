@@ -17,10 +17,9 @@ MonoBehaviour:
   activatables:
   - {fileID: 11400000, guid: 4019451fcc6bf6e4685bfc7ea2481f3e, type: 2}
   - {fileID: 11400000, guid: 130a2980cebc1c1429d50242871f679b, type: 2}
-  maxHealth: 100
-  currentHealth: 100
-  attackPower: 10
-  agility: 10
+  maxHealth: 1000
+  currentHealth: 1000
+  abilityPower: 10
   defence: 10
   pierceResistance: 1
   slashResistance: 1

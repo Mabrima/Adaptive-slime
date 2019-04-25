@@ -7,16 +7,20 @@ public class UnitBase : ScriptableObject
 {
     [Header("Name")]
     public string unitName;
+
     [Header("Skills")]
     [SerializeField]
     protected List<PassiveSkillBase> passives;
     [SerializeField]
     protected List<ActivatableSkillBase> activatables;
+
+    protected List<ActivatableSkillBase> activatablesOffCooldown;
+    protected List<ActivatableSkillBase> activatablesOnCooldown;
+
     [Header("Stats")]
     public float maxHealth = 100;
     public float currentHealth = 100;
-    public float attackPower = 10;
-    public float agility = 10;
+    public float abilityPower = 10;
     public float defence = 10;
 
     public float pierceResistance = 1;
@@ -40,12 +44,16 @@ public class UnitBase : ScriptableObject
 
     public enum Environment { FORREST, DESERT, JUNGLE, SEA, MOUNTAINS }
 
-    void Start()
+    public void Initialize()
     {
         ActivatePassives();
+        MakeActivatablesIntoCopies();
+        activatablesOffCooldown = new List<ActivatableSkillBase>();
+        activatablesOnCooldown = new List<ActivatableSkillBase>();
+        AddInitialSkillsToOffCooldown();
     }
 
-    public virtual void ActivatePassives()
+    public void ActivatePassives()
     {
         foreach (PassiveSkillBase passive in passives)
         {
@@ -53,14 +61,42 @@ public class UnitBase : ScriptableObject
         }
     }
 
-    public virtual List<PassiveSkillBase> GetPassives()
+    private void MakeActivatablesIntoCopies()
+    {
+        for (int i = 0; i < activatables.Count; i++)
+        {
+            activatables.Add(Instantiate(activatables[0]));
+            activatables.RemoveAt(0);
+        }
+    }
+
+    private void AddInitialSkillsToOffCooldown()
+    {
+        foreach (ActivatableSkillBase skill in activatables)
+        {
+            activatablesOffCooldown.Add(skill);
+        }
+    }
+
+    public List<PassiveSkillBase> GetPassives()
     {
         return passives;
     }
 
-    public virtual List<ActivatableSkillBase> GetActivatables()
+    public List<ActivatableSkillBase> GetActivatables()
     {
         return activatables;
+    }
+
+    public List<ActivatableSkillBase> GetSkillsOffCooldown()
+    {
+        return activatablesOffCooldown;
+    }
+
+    public void AddSkillToActivatableSkills(ActivatableSkillBase skill)
+    {
+        activatablesOffCooldown.Add(skill);
+        activatables.Add(skill);
     }
 
     public void SetPoisoned(float dmg, int duration)
@@ -75,6 +111,9 @@ public class UnitBase : ScriptableObject
         bleedingDuration = duration;
     }
 
+    /// <summary>
+    /// Handles all the units end of turn effects.
+    /// </summary>
     public void EndOfTurnEffects()
     {
         if (healingDuration > 0)
@@ -100,6 +139,11 @@ public class UnitBase : ScriptableObject
         }
     }
 
+    /// <summary>
+    /// Handles healing the unit recieves.
+    /// </summary>
+    /// <param name="healAmount"></param>
+    /// <param name="skillname"></param>
     public void Heal(float healAmount, string skillname)
     {
         currentHealth += healAmount;
@@ -107,40 +151,42 @@ public class UnitBase : ScriptableObject
         GameManager.instance.HealPrint(healAmount, unitName, skillname);
     }
 
-    public void Defend(float otherDmg, GameManager.DmgTypes dmgType, float otherAgility, string skillName, string otherName, bool trueHit = false)
+    /// <summary>
+    /// Future purpose, handling hitchance of abilities. For now just calls take dmg
+    /// </summary>
+    /// <param name="otherDmg"></param>
+    /// <param name="dmgType"></param>
+    /// <param name="skillName"></param>
+    /// <param name="otherName"></param>
+    public void Defend(float otherDmg, GameManager.DmgTypes dmgType, string skillName, string otherName)
     {
-        if (trueHit)
-        {
-            TakeDmg(otherDmg, dmgType, otherName);
-            GameManager.instance.CombatPrint(otherDmg, true, otherName, skillName);
-        }
-        if (Random.Range(0, 1f) < (otherAgility / agility))
-        {
-            TakeDmg(otherDmg, dmgType, otherName, skillName);
-        }
-        else
-        {
-            GameManager.instance.CombatPrint(otherDmg, false, otherName, skillName);
-        }
+        TakeDmg(otherDmg, dmgType, otherName, skillName);
     }
 
-    public void TakeDmg(float otherDmg, GameManager.DmgTypes dmgType, string otherName, string skillName = "")
+    /// <summary>
+    /// Handles taking dmg from other units skills.
+    /// </summary>
+    /// <param name="otherDmg"></param>
+    /// <param name="dmgType"></param>
+    /// <param name="otherName"></param>
+    /// <param name="skillName"></param>
+    private void TakeDmg(float otherDmg, GameManager.DmgTypes dmgType, string otherName, string skillName = "")
     {
         float tempDmg;
         switch (dmgType)
         {
             case GameManager.DmgTypes.CRUSH:
-                tempDmg = Mathf.Clamp(otherDmg - defence, 0, 9999) * crushResistance;
+                tempDmg = Mathf.Clamp((otherDmg - defence) * crushResistance * Random.Range(0.8f, 1.2f), 1, 9999);
                 currentHealth = currentHealth - tempDmg;
                 GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
                 break;
             case GameManager.DmgTypes.PIERCE:
-                tempDmg = Mathf.Clamp(otherDmg - defence, 0, 9999) * pierceResistance;
+                tempDmg = Mathf.Clamp((otherDmg - defence) * pierceResistance * Random.Range(0.8f, 1.2f), 1, 9999);
                 currentHealth = currentHealth - tempDmg;
                 GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
                 break;
             case GameManager.DmgTypes.SLASH:
-                tempDmg = Mathf.Clamp(otherDmg - defence, 0, 9999) * slashResistance;
+                tempDmg = Mathf.Clamp((otherDmg - defence) * slashResistance * Random.Range(0.8f, 1.2f), 1, 9999);
                 currentHealth = currentHealth - tempDmg;
                 GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
                 break;
@@ -160,6 +206,49 @@ public class UnitBase : ScriptableObject
                 GameManager.instance.CorruptedBloodPrint(tempDmg, otherName);
                 break;
         }
+    }
 
+    /// <summary>
+    /// Decrements the cooldownTimer of all skils that are on cooldown by 1
+    /// </summary>
+    public void DecrementCooldowns()
+    {
+        for (int i = 0; i < activatablesOnCooldown.Count; i++)
+        {
+            activatablesOnCooldown[i].DecrementCooldown();
+            if (activatablesOnCooldown[i].cooldownTimer == 0)
+            {
+                activatablesOffCooldown.Add(activatablesOnCooldown[i]);
+                activatablesOnCooldown.RemoveAt(i);
+                i--;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sets a skill on cooldown if the skill has a nonzero cooldown time
+    /// </summary>
+    /// <param name="skill"></param>
+    public void SetSkillOnCooldown(ActivatableSkillBase skill)
+    {
+        if (skill.cooldown > 0)
+        {
+            skill.SetCooldownTimer();
+            activatablesOffCooldown.Remove(skill);
+            activatablesOnCooldown.Add(skill);
+        }
+    }
+
+    /// <summary>
+    /// Resets all cooldowns to 0 and puts them in the offColdown list
+    /// </summary>
+    public void ResetCooldowns()
+    {
+        for (int i = 0; i < activatablesOnCooldown.Count; i++)
+        {
+            activatablesOnCooldown[0].cooldownTimer = 0;
+            activatablesOffCooldown.Add(activatablesOnCooldown[0]);
+            activatablesOnCooldown.RemoveAt(0);
+        }
     }
 }

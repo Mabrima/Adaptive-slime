@@ -22,6 +22,8 @@ MonoBehaviour:
   baseBleed: 2
   scalingBleed: 0.2
   bleedDuration: 5
+  cooldown: 10
+  cooldownTimer: 0
   dmgType: 2
   target: 1
   baseHeal: 0

@@ -16,6 +16,11 @@ public class ButtonHoverOver : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private readonly string defaultDescription = "Hover over a skill to see its description.";
 
+    /// <summary>
+    /// Script to handle buttons, OnEnter, OnClick and OnExit properties.
+    /// </summary>
+    /// <param name="eventData"></param>
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (GameManager.instance.currentState != GameManager.State.PLAYER_TURN)

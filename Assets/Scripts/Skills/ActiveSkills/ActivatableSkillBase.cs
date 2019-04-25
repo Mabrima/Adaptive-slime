@@ -7,7 +7,7 @@ public class ActivatableSkillBase : ScriptableObject
 {
     public enum Target { NULL, ENEMY, SELF }
 
-    [Header("Dmg Stats")]
+    [Header("Name and Description")]
     public string skillName = "unNamed";
     public string description = "noDescription";
 
@@ -22,6 +22,7 @@ public class ActivatableSkillBase : ScriptableObject
     public float scalingBleed = 0;
     public int bleedDuration = 0;
     public int cooldown = 0;
+    public int cooldownTimer = 0;
     public GameManager.DmgTypes dmgType = 0;
 
     [Header("Target")]
@@ -41,11 +42,19 @@ public class ActivatableSkillBase : ScriptableObject
 
     public void UseSelfEffect(UnitBase unit)
     {
-        unit.Heal(baseHeal + scalingHeal * unit.attackPower, skillName);
+        unit.Heal(baseHeal + scalingHeal * unit.abilityPower, skillName);
         unit.healingDuration = healDuration;
-        unit.healingOverTimeAmount = baseHealOverTime + scalingHealOverTime * unit.attackPower;
+        unit.healingOverTimeAmount = baseHealOverTime + scalingHealOverTime * unit.abilityPower;
     }
 
+    public void DecrementCooldown()
+    {
+        cooldownTimer--;
+    }
 
-    
+    public void SetCooldownTimer()
+    {
+        cooldownTimer = cooldown;
+    }
+
 }

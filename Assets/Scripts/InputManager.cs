@@ -5,12 +5,9 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    /// <summary>
+    /// Not in use
+    /// </summary>
 
     public void CheckKeys()
     {
