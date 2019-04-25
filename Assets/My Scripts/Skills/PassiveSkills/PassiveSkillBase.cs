@@ -54,14 +54,14 @@ public class PassiveSkillBase : ScriptableObject
 
     public void RemoveBonus(UnitBase unit)
     {
-        unit.abilityPower -= abilityPower;
         unit.abilityPower /= abilityPowerPercent;
-        unit.defence -= defence;
+        unit.abilityPower -= abilityPower;
         unit.defence /= defencePercent;
-        unit.maxHealth -= health;
-        unit.currentHealth -= health;
+        unit.defence -= defence;
         unit.maxHealth /= healthPercent;
+        unit.maxHealth -= health;
         unit.currentHealth /= healthPercent;
+        unit.currentHealth -= health;
 
         unit.crushResistance /= crushResistance;
         unit.pierceResistance /= pierceResistance;

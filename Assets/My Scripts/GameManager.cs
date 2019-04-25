@@ -140,9 +140,10 @@ public class GameManager : MonoBehaviour
             }
             if (notKnownSkill && Random.Range(0, 2) > 0)
             {
-                player.unitBase.AddSkillToActivatableSkills(Instantiate(enemySkill));
+                ActivatableSkillBase tempSkill = Instantiate(enemySkill);
+                player.unitBase.AddSkillToActivatableSkills(tempSkill);
                 
-                player.AddActivatableButton(enemySkill);
+                player.AddActivatableButton(tempSkill);
                 return true;
             }
         }
@@ -154,9 +155,10 @@ public class GameManager : MonoBehaviour
         bool notKnownSkill = true;
         foreach (PassiveSkillBase enemySkill in currentEnemy.unitBase.GetPassives())
         {
+            Debug.Log("Attempting to steal passive " + enemySkill.skillName);
             foreach (PassiveSkillBase playerSkill in player.unitBase.GetPassives())
             {
-                if (playerSkill.skillName != enemySkill.skillName)
+                if (playerSkill.skillName == enemySkill.skillName)
                 {
                     notKnownSkill = false;
                     break;
@@ -164,6 +166,7 @@ public class GameManager : MonoBehaviour
             }
             if (notKnownSkill && Random.Range(0, 2) > 0)
             {
+                Debug.Log("Attempting to add skill");
                 player.unitBase.GetPassives().Add(enemySkill);
                 player.inactiveEquipables.Add(enemySkill);
                 player.AddInactiveEquipButton(enemySkill);
