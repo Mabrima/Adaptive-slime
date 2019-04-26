@@ -10,19 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae4fd98169555184e87757a61efb779c, type: 3}
-  m_Name: Wolf
+  m_Name: Tortoise
   m_EditorClassIdentifier: 
-  unitName: <color=#f97522>Wolf</color>
+  unitName: <color=#f97522>Tortoise</color>
   passives:
-  - {fileID: 11400000, guid: d22edd86d89c72447b412d83eb2ff55c, type: 2}
-  - {fileID: 11400000, guid: 35488436981291346b698fb8816892ec, type: 2}
+  - {fileID: 11400000, guid: 433f320dc465d3446a38bbd9db6d5b90, type: 2}
   activatables:
-  - {fileID: 11400000, guid: 194f7def196bdda469043172ad44f182, type: 2}
-  - {fileID: 11400000, guid: 3d17a3e19504024418f15c1b6203f9d3, type: 2}
-  maxHealth: 70
-  currentHealth: 70
-  abilityPower: 10
-  defence: 6
+  - {fileID: 11400000, guid: c9aabf8459479104591ea3ceab1b0590, type: 2}
+  maxHealth: 40
+  currentHealth: 40
+  abilityPower: 2
+  defence: 12
   pierceResistance: 1
   slashResistance: 1
   crushResistance: 1

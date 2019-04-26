@@ -15,13 +15,13 @@ MonoBehaviour:
   unitName: <color=#f97522>Snake</color>
   passives:
   - {fileID: 11400000, guid: 858f97d38d057734ea793c641522fe7e, type: 2}
+  - {fileID: 11400000, guid: f2647cf91e4dfd04f97b525708b9bfdc, type: 2}
   activatables:
   - {fileID: 11400000, guid: de622ab7475196841a84e01dcc1180d3, type: 2}
   - {fileID: 11400000, guid: c9aabf8459479104591ea3ceab1b0590, type: 2}
   maxHealth: 60
   currentHealth: 60
-  attackPower: 12
-  agility: 22
+  abilityPower: 8
   defence: 8
   pierceResistance: 1
   slashResistance: 1

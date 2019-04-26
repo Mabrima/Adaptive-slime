@@ -45,13 +45,13 @@ public class GameManager : MonoBehaviour
     void GameStartup()
     {
         player = FindObjectOfType<Player>();
-        enemies = FindObjectsOfType<EnemyBase>(); //hail satan
+        enemies = FindObjectsOfType<EnemyBase>(); 
         playerHealthText = GameObject.Find("PlayerHealth").GetComponent<Text>();
         enemyHealthText = GameObject.Find("EnemyHealth").GetComponent<Text>();
         worldText = GameObject.Find("WorldText").GetComponent<Text>();
         descriptionText = GameObject.Find("DescriptionText").GetComponent<Text>();
 
-
+        currentState = State.PLAYER_TURN;
         FindNewEnemy();
     }
 
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
             AttemptStealSkill();
             FindNewEnemy();
             turn = 1;
-            currentState = State.PLAYER_TURN;
+            currentState = State.END_OF_TURN;
         }
         if (currentState != State.GAME_OVER && player.unitBase.currentHealth <= 0)
         {
@@ -98,8 +98,8 @@ public class GameManager : MonoBehaviour
             worldText.text += '\n' + "End of turn " + turn; 
             currentEnemy.unitBase.EndOfTurnEffects();
             player.unitBase.EndOfTurnEffects();
-            playerHealthText.text = "PlayerHealth: " + (int)player.unitBase.currentHealth;
-            enemyHealthText.text = "EnemyHealth: " + (int)currentEnemy.unitBase.currentHealth;
+            playerHealthText.text = "PlayerHealth: " + Mathf.CeilToInt(player.unitBase.currentHealth);
+            enemyHealthText.text = "EnemyHealth: " + Mathf.CeilToInt(currentEnemy.unitBase.currentHealth);
             player.hasReadapted = false;
 
             player.unitBase.DecrementCooldowns();
@@ -242,7 +242,7 @@ public class GameManager : MonoBehaviour
 
     public void CorruptedBloodPrint(float dmg, string name)
     {
-        worldText.text += '\n' + name + " Poison mixes with the bleeding causing a <color=purple>corrupted blood</color> hemorrhage dealing " + (int)dmg + " dmg";
+        worldText.text += '\n' + name + " Poison mixes with bleeding causing a <color=purple>corrupted blood</color> hemorrhage dealing " + (int)dmg + " dmg";
     }
 
     public void BleedPrint(float dmg, string name)
