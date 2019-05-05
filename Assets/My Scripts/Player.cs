@@ -18,6 +18,10 @@ public class Player : MonoBehaviour
 
     public bool hasReadapted = false;
 
+    private float maxHealthBank = 0;
+    private float abilityPowerBank = 0;
+    private float defenceBank = 0;
+
     private void Start()
     {
         unitBase = Instantiate(unitBase);
@@ -35,21 +39,23 @@ public class Player : MonoBehaviour
             Button tempButton = Instantiate(buttonBase, activateablesButtons.transform);
             tempButton.transform.localPosition = new Vector3(0, 90 - 35 * i, 0);
             tempButton.GetComponentInChildren<Text>().text = unitBase.GetActivatables()[i].skillName;
-            tempButton.GetComponent<ButtonHoverOver>().activeHolder = unitBase.GetActivatables()[i];
+            tempButton.GetComponent<SkillButtonHandler>().activeHolder = unitBase.GetActivatables()[i];
         }
         ReMakeEquipableButtons();
     }
 
     private void ReMakeEquipableButtons()
     {
-        for (int i = 0; i < inactiveEquipablesButtons.transform.childCount; i++)
+        int size = inactiveEquipablesButtons.transform.childCount;
+        for (int i = 0; i < size; i++)
         {
-            Destroy(inactiveEquipablesButtons.transform.GetChild(0).gameObject);
+            Destroy(inactiveEquipablesButtons.transform.GetChild(i).gameObject);
         }
 
-        for (int i = 0; i < activeEquipablesButtons.transform.childCount; i++)
+        size = activeEquipablesButtons.transform.childCount;
+        for (int i = 0; i < size; i++)
         {
-            Destroy(activeEquipablesButtons.transform.GetChild(0).gameObject);
+            Destroy(activeEquipablesButtons.transform.GetChild(i).gameObject);
         }
 
         for (int i = 0; i < inactiveEquipables.Count; i++)
@@ -57,7 +63,7 @@ public class Player : MonoBehaviour
             Button tempButton = Instantiate(buttonBase, inactiveEquipablesButtons.transform);
             tempButton.transform.localPosition = new Vector3(0, 90 - 35 * i, 0);
             tempButton.GetComponentInChildren<Text>().text = inactiveEquipables[i].skillName;
-            tempButton.GetComponent<ButtonHoverOver>().passiveHolder = inactiveEquipables[i];
+            tempButton.GetComponent<SkillButtonHandler>().passiveHolder = inactiveEquipables[i];
         }
 
         for (int i = 0; i < activeEquipables.Count; i++)
@@ -65,7 +71,7 @@ public class Player : MonoBehaviour
             Button tempButton = Instantiate(buttonBase, activeEquipablesButtons.transform);
             tempButton.transform.localPosition = new Vector3(0, 90 - 35 * i, 0);
             tempButton.GetComponentInChildren<Text>().text = activeEquipables[i].skillName;
-            tempButton.GetComponent<ButtonHoverOver>().passiveHolder = activeEquipables[i];
+            tempButton.GetComponent<SkillButtonHandler>().passiveHolder = activeEquipables[i];
         }
     }
 
@@ -74,7 +80,7 @@ public class Player : MonoBehaviour
         Button tempButton = Instantiate(buttonBase, activateablesButtons.transform);
         tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (activateablesButtons.transform.childCount-1), 0);
         tempButton.GetComponentInChildren<Text>().text = skill.skillName;
-        tempButton.GetComponent<ButtonHoverOver>().activeHolder = skill;
+        tempButton.GetComponent<SkillButtonHandler>().activeHolder = skill;
     }
 
     public void AddActiveEquipButton(PassiveSkillBase skill)
@@ -82,7 +88,7 @@ public class Player : MonoBehaviour
         Button tempButton = Instantiate(buttonBase, activeEquipablesButtons.transform);
         tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (activeEquipablesButtons.transform.childCount-1), 0);
         tempButton.GetComponentInChildren<Text>().text = skill.skillName;
-        tempButton.GetComponent<ButtonHoverOver>().passiveHolder = skill;
+        tempButton.GetComponent<SkillButtonHandler>().passiveHolder = skill;
     }
 
     public void AddInactiveEquipButton(PassiveSkillBase skill)
@@ -90,7 +96,7 @@ public class Player : MonoBehaviour
         Button tempButton = Instantiate(buttonBase, inactiveEquipablesButtons.transform);
         tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (inactiveEquipablesButtons.transform.childCount-1), 0);
         tempButton.GetComponentInChildren<Text>().text = skill.skillName;
-        tempButton.GetComponent<ButtonHoverOver>().passiveHolder = skill;
+        tempButton.GetComponent<SkillButtonHandler>().passiveHolder = skill;
     }
 
     void SetInitialPassives()
@@ -155,13 +161,31 @@ public class Player : MonoBehaviour
         return null;
     }
 
-    public void StealStats(UnitBase unit)
+    public void BankStats(UnitBase unit)
     {
-        unitBase.maxHealth += unit.maxHealth * 0.1f;
-        unitBase.abilityPower += unit.abilityPower * 0.1f;
-        unitBase.defence += unit.defence * 0.1f;
+        maxHealthBank += unit.maxHealth * 0.1f;
+        abilityPowerBank += unit.abilityPower * 0.1f;
+        defenceBank += unit.defence * 0.1f;
 
         unitBase.Heal(unit.maxHealth * 0.2f, "end of battle heal");
+    }
+
+    public void ApplyBank()
+    {
+        float tempFullmaxHealth = unitBase.maxHealth + maxHealthBank;
+        float tempFullAbilityPower = unitBase.abilityPower + abilityPowerBank;
+        float tempFullDefence = unitBase.defence + defenceBank;
+        GameManager.instance.worldText.text += '\n' + "While resting you have had time to fully digest your foes, your stats have grown from \n <color=red>" + unitBase.abilityPower
+            + "</color> to <color=red>" + (int)tempFullAbilityPower + " power</color>, <color=green>" + unitBase.maxHealth + "</color> to <color=green>" 
+            + (int)tempFullmaxHealth + " health</color> and <color=cyan>" + unitBase.defence + "</color> to <color=cyan>" + (int)tempFullDefence + " defence</color>";
+
+        unitBase.maxHealth = tempFullmaxHealth;
+        unitBase.abilityPower = tempFullAbilityPower;
+        unitBase.defence = tempFullDefence;
+
+        abilityPowerBank = 0;
+        maxHealthBank = 0;
+        defenceBank = 0;
     }
 
     public void Readapting(PassiveSkillBase skillToSwap)
@@ -193,7 +217,7 @@ public class Player : MonoBehaviour
             equipedSkillToSwap.RemoveBonus(unitBase);
             unequipedSkillToSwap.GiveBonus(unitBase);
 
-            GameManager.instance.worldText.text += '\n' + "Swapped " + equipedSkillToSwap + " with " + unequipedSkillToSwap;
+            GameManager.instance.worldText.text += '\n' + "Swapped " + equipedSkillToSwap.skillName + " with " + unequipedSkillToSwap.skillName;
 
             ReMakeEquipableButtons();
 

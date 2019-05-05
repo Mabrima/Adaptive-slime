@@ -6,7 +6,10 @@ using UnityEngine;
 public class UnitBase : ScriptableObject
 {
     [Header("Name")]
-    public string unitName;
+    public string unitName = "unitBase";
+
+    [Header("Area")]
+    public Area unitArea = Area.FORREST;
 
     [Header("Skills")]
     [SerializeField]
@@ -123,18 +126,18 @@ public class UnitBase : ScriptableObject
         }
         if (bleedingDuration > 0 && poisonedDuration > 0)
         {
-            TakeDmg(bleedingDmg + poisonedDmg, GameManager.DmgTypes.NULL, unitName);
+            TakeDmg(bleedingDmg + poisonedDmg, DmgTypes.NULL, unitName);
             bleedingDuration--;
             poisonedDuration--;
         }
         else if (bleedingDuration > 0)
         {
-            TakeDmg(bleedingDmg, GameManager.DmgTypes.BLEED, unitName);
+            TakeDmg(bleedingDmg, DmgTypes.BLEED, unitName);
             bleedingDuration--;
         }
         else if (poisonedDuration > 0)
         {
-            TakeDmg(poisonedDmg, GameManager.DmgTypes.POISON, unitName);
+            TakeDmg(poisonedDmg, DmgTypes.POISON, unitName);
             poisonedDuration--;
         }
     }
@@ -158,7 +161,7 @@ public class UnitBase : ScriptableObject
     /// <param name="dmgType"></param>
     /// <param name="skillName"></param>
     /// <param name="otherName"></param>
-    public void Defend(float otherDmg, GameManager.DmgTypes dmgType, string skillName, string otherName)
+    public void Defend(float otherDmg, DmgTypes dmgType, string skillName, string otherName)
     {
         TakeDmg(otherDmg, dmgType, otherName, skillName);
     }
@@ -170,32 +173,32 @@ public class UnitBase : ScriptableObject
     /// <param name="dmgType"></param>
     /// <param name="otherName"></param>
     /// <param name="skillName"></param>
-    private void TakeDmg(float otherDmg, GameManager.DmgTypes dmgType, string otherName, string skillName = "")
+    private void TakeDmg(float otherDmg, DmgTypes dmgType, string otherName, string skillName = "")
     {
         float tempDmg;
         switch (dmgType)
         {
-            case GameManager.DmgTypes.CRUSH:
+            case DmgTypes.CRUSH:
                 tempDmg = Mathf.Clamp((otherDmg - defence) * crushResistance * Random.Range(0.8f, 1.2f), 1, 9999);
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, unitName, skillName);
                 break;
-            case GameManager.DmgTypes.PIERCE:
+            case DmgTypes.PIERCE:
                 tempDmg = Mathf.Clamp((otherDmg - defence) * pierceResistance * Random.Range(0.8f, 1.2f), 1, 9999);
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, unitName,skillName);
                 break;
-            case GameManager.DmgTypes.SLASH:
+            case DmgTypes.SLASH:
                 tempDmg = Mathf.Clamp((otherDmg - defence) * slashResistance * Random.Range(0.8f, 1.2f), 1, 9999);
                 currentHealth = currentHealth - tempDmg;
-                GameManager.instance.CombatPrint(tempDmg, true, otherName, skillName);
+                GameManager.instance.CombatPrint(tempDmg, true, otherName, unitName, skillName);
                 break;
-            case GameManager.DmgTypes.POISON:
+            case DmgTypes.POISON:
                 tempDmg = otherDmg * poisonResistance;
                 currentHealth = currentHealth - tempDmg;
                 GameManager.instance.PoisonPrint(tempDmg, otherName);
                 break;
-            case GameManager.DmgTypes.BLEED:
+            case DmgTypes.BLEED:
                 tempDmg = otherDmg * bleedResistance;
                 currentHealth = currentHealth - tempDmg;
                 GameManager.instance.BleedPrint(tempDmg, otherName);

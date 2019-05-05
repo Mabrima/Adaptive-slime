@@ -16,7 +16,7 @@ MonoBehaviour:
   description: A nasty bite full of bacteria that opens wounds and fills them with
     poison.
   baseDmg: 4
-  scalingDmg: 0.4
+  scalingDmg: 0.2
   basePoison: 5
   scalingPoison: 0.3
   poisonDuration: 2

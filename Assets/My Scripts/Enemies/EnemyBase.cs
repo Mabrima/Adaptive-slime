@@ -5,14 +5,14 @@ using UnityEngine;
 public class EnemyBase : MonoBehaviour
 {
     public UnitBase unitBase;
+    private UnitBase originalBase;
     /// <summary>
     /// For letting the AI control unitbases as enemies.
     /// </summary>
-
     private void Start()
     {
-        unitBase = Instantiate(unitBase);
-        unitBase.Initialize();
+        originalBase = unitBase;
+        ResetEnemy();
     }
 
     public ActivatableSkillBase GetRandomSkill()
@@ -22,8 +22,16 @@ public class EnemyBase : MonoBehaviour
 
     public void ResetEnemy()
     {
-        unitBase.currentHealth = unitBase.maxHealth;
-        unitBase.ResetCooldowns();
-        
+        unitBase = Instantiate(originalBase);
+        unitBase.maxHealth *= Random.Range(0.9f, 1.1f);
+        unitBase.currentHealth = Mathf.FloorToInt(unitBase.maxHealth);
+        unitBase.abilityPower *= Random.Range(0.9f, 1.1f);
+        unitBase.defence *= Random.Range(0.9f, 1.1f);
+        unitBase.Initialize();
+    }
+
+    public UnitBase GetOriginalBase()
+    {
+        return originalBase;
     }
 }

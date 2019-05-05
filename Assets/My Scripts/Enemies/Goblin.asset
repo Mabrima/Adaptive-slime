@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Goblin
   m_EditorClassIdentifier: 
   unitName: <color=#f97522>Goblin</color>
+  unitArea: 0
   passives:
   - {fileID: 11400000, guid: f2647cf91e4dfd04f97b525708b9bfdc, type: 2}
   activatables:

@@ -23,7 +23,7 @@ public class ActivatableSkillBase : ScriptableObject
     public int bleedDuration = 0;
     public int cooldown = 0;
     public int cooldownTimer = 0;
-    public GameManager.DmgTypes dmgType = 0;
+    public DmgTypes dmgType = 0;
 
     [Header("Target")]
     public Target target = 0;

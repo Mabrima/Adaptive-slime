@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Tortoise
   m_EditorClassIdentifier: 
   unitName: <color=#f97522>Tortoise</color>
+  unitArea: 3
   passives:
   - {fileID: 11400000, guid: 433f320dc465d3446a38bbd9db6d5b90, type: 2}
   activatables:

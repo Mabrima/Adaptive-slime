@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Snake
   m_EditorClassIdentifier: 
   unitName: <color=#f97522>Snake</color>
+  unitArea: 1
   passives:
   - {fileID: 11400000, guid: 858f97d38d057734ea793c641522fe7e, type: 2}
   - {fileID: 11400000, guid: f2647cf91e4dfd04f97b525708b9bfdc, type: 2}

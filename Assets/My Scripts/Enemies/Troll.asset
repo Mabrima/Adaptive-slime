@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Troll
   m_EditorClassIdentifier: 
   unitName: <color=#f97522>Troll</color>
+  unitArea: 0
   passives:
   - {fileID: 11400000, guid: 600606bc733f2714b996a11129195c67, type: 2}
   activatables:
@@ -22,17 +23,17 @@ MonoBehaviour:
   currentHealth: 200
   abilityPower: 10
   defence: 0
-  pierceResistance: 1
-  slashResistance: 1
-  crushResistance: 1
-  bleedResistance: 1
-  poisonResistance: 1
+  pierceResistance: 0.8
+  slashResistance: 0.6
+  crushResistance: 1.4
+  bleedResistance: 0.6
+  poisonResistance: 1.2
   poisonedDmg: 0
   poisonedDuration: 0
   bleedingDmg: 0
   bleedingDuration: 0
-  healingOverTimeAmount: 0
-  healingDuration: 0
+  healingOverTimeAmount: 6
+  healingDuration: 999
   poisionBonusDuration: 0
   bleedBonusDuration: 0
   healingBonusDuration: 0

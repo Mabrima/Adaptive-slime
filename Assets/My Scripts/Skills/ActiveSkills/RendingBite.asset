@@ -19,7 +19,7 @@ MonoBehaviour:
   basePoison: 0
   scalingPoison: 0
   poisonDuration: 0
-  baseBleed: 2
+  baseBleed: 4
   scalingBleed: 0.2
   bleedDuration: 3
   cooldown: 5

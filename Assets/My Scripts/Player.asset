@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4fd98169555184e87757a61efb779c, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
-  unitName: <color=#edf902>Player</color>
+  unitName: <color=#42a4f4>Player</color>
   passives: []
   activatables:
   - {fileID: 11400000, guid: 4019451fcc6bf6e4685bfc7ea2481f3e, type: 2}
+  - {fileID: 11400000, guid: 194f7def196bdda469043172ad44f182, type: 2}
   - {fileID: 11400000, guid: 130a2980cebc1c1429d50242871f679b, type: 2}
   maxHealth: 100
   currentHealth: 100

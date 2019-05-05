@@ -4,22 +4,26 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+public enum State { NULL, PLAYER_TURN, ENEMY_TURN, WORLD, GAME_OVER, END_OF_TURN, HANDLE_PLAYER_CHOICE }
+public enum DmgTypes { NULL, SLASH, PIERCE, CRUSH, BLEED, POISON }
+
 public class GameManager : MonoBehaviour
 {
-    public enum DmgTypes { NULL, SLASH, PIERCE, CRUSH, BLEED, POISON }
-    public enum State { NULL, PLAYER_TURN, ENEMY_TURN, WORLD, DEALING_WITH_READAPT, GAME_OVER, END_OF_TURN }
 
     Player player;
-    public Text descriptionText;
     public Text worldText;
     public Text playerHealthText;
     public Text enemyHealthText;
+    public GameObject destinations;
 
     public static GameManager instance;
     public State currentState = State.NULL;
     public EnemyBase[] enemies;
     public EnemyBase currentEnemy;
-    private int turn = 1;
+    private int turn;
+    private Area starterArea = Area.FORREST;
+    public Area currentArea;
+
 
     private void Awake()
     {
@@ -49,10 +53,15 @@ public class GameManager : MonoBehaviour
         playerHealthText = GameObject.Find("PlayerHealth").GetComponent<Text>();
         enemyHealthText = GameObject.Find("EnemyHealth").GetComponent<Text>();
         worldText = GameObject.Find("WorldText").GetComponent<Text>();
-        descriptionText = GameObject.Find("DescriptionText").GetComponent<Text>();
+        destinations = GameObject.Find("Destinations");
+        destinations.SetActive(false);
 
+        campUsesLeft = 3;
+        turn = 1;
+
+        currentArea = starterArea;
         currentState = State.PLAYER_TURN;
-        FindNewEnemy();
+        FindNewEnemy(starterArea);
     }
 
     private void Update()
@@ -64,22 +73,22 @@ public class GameManager : MonoBehaviour
             Invoke("GameStartup", .1f);
         }
         //WIN/LOSE
-        if (currentState != State.GAME_OVER && currentEnemy.unitBase.currentHealth <= 0)
+        if (currentState == State.ENEMY_TURN && currentEnemy.unitBase.currentHealth <= 0)
         {
-            currentEnemy.ResetEnemy();
-            player.StealStats(currentEnemy.unitBase);
+            enemyHealthText.text = "EnemyHealth: 0";
+            worldText.text += '\n' + "<color=yellow>Well done!</color> You have slain " + currentEnemy.unitBase.unitName;
+            player.BankStats(currentEnemy.GetOriginalBase());
             AttemptStealSkill();
-            FindNewEnemy();
             turn = 1;
-            currentState = State.END_OF_TURN;
+            destinations.SetActive(true);
+            currentState = State.HANDLE_PLAYER_CHOICE;
         }
         if (currentState != State.GAME_OVER && player.unitBase.currentHealth <= 0)
         {
             player.TurnOffButtons();
-            worldText.text += '\n' + "Game over, you have perished";
+            worldText.text += '\n' + "<color=red>Game over!</color> you have perished";
             currentState = State.GAME_OVER;
         }
-        
 
         ////PLAYER COMBAT
         //wait for player input to trigger PlayerUseSkill()
@@ -215,23 +224,32 @@ public class GameManager : MonoBehaviour
         usingUnit.SetSkillOnCooldown(skill);
     }
 
-    //MOSTLY FINE TO KEEP
-    public void FindNewEnemy()
+    int enemyRerollCap = 100;
+    public void FindNewEnemy(Area area)
     {
-        currentEnemy = enemies[Random.Range(0, enemies.Length)];
+        for (int i = 0; i < enemyRerollCap; i++)
+        {
+            currentEnemy = enemies[Random.Range(0, enemies.Length)];
+            if (currentEnemy.unitBase.unitArea == area)
+                break;
+        }
+
+        currentEnemy.ResetEnemy();
         worldText.text += '\n' + "You face a " + currentEnemy.unitBase.unitName;
         enemyHealthText.text = "EnemyHealth: " + currentEnemy.unitBase.currentHealth.ToString();
     }
 
-    public void CombatPrint(float dmg, bool hit, string name, string skillName)
+
+
+    public void CombatPrint(float dmg, bool hit, string usingName, string defendingName, string skillName)
     {
         if (!hit)
         {
-            worldText.text += '\n' + name + " Missed";
+            worldText.text += '\n' + usingName + " Missed";
         }
         else
         {
-            worldText.text += '\n' + name + " used " + skillName + " it <color=red>dealt</color> " + (int)dmg + " dmg";
+            worldText.text += '\n' + usingName + " used " + skillName + " it <color=red>dealt</color> " + (int)dmg + " dmg to " + defendingName;
         }
     }
 
@@ -255,6 +273,20 @@ public class GameManager : MonoBehaviour
         worldText.text += '\n' + name + " suffers " + (int)dmg + " dmg from the <color=#56ff23>poison</color>";
     }
 
+    public int campUsesLeft;
+    public void GoToCamp()
+    {
+        player.ApplyBank();
+        campUsesLeft--;
+        worldText.text += '\n' + "You now only have <color=yellow>" + campUsesLeft + "</color> times left to camp before you face your ultimate <color=#f97522>foe</color>";
+    }
 
+    public void NextCombat()
+    {
+        FindNewEnemy(currentArea);
+        currentState = State.PLAYER_TURN;
+
+        
+    }
 
 }

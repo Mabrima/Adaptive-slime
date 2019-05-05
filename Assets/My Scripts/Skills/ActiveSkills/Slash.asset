@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: Slash
   description: Slash with fang or sword to inflict slashing damage on your opponent.
   baseDmg: 8
-  scalingDmg: 0.8
+  scalingDmg: 0.7
   basePoison: 0
   scalingPoison: 0
   poisonDuration: 0

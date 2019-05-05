@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: Ram
   m_EditorClassIdentifier: 
   unitName: <color=#f97522>Ram</color>
+  unitArea: 2
   passives:
   - {fileID: 11400000, guid: d22edd86d89c72447b412d83eb2ff55c, type: 2}
   activatables:
   - {fileID: 11400000, guid: 4019451fcc6bf6e4685bfc7ea2481f3e, type: 2}
   maxHealth: 80
   currentHealth: 80
-  attackPower: 12
-  agility: 16
-  defence: 6
+  abilityPower: 10
+  defence: 4
   pierceResistance: 1
   slashResistance: 1
   crushResistance: 1
