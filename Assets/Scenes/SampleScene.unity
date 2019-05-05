@@ -2131,7 +2131,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 576323533}
   m_HandleRect: {fileID: 576323532}
   m_Direction: 2
-  m_Value: 0.9999996
+  m_Value: 1
   m_Size: 0.7506
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2700,14 +2700,18 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Welcome to <color=purple>Adaptive Slime!</color>\nYour goal is to survive,
-    to do this you defeat enemies in your way.\nDefeated enemies become part of your
-    power. You gain a bit of their <color=yellow>stats</color> and might gain one
-    of their <color=yellow>skills</color>.\nDuring combat you have two things to do
-    first you can once per turn <color=yellow>Readapt</color> by clicking one equipped
-    and \none unequipped skill to swap which ones bonus you recieve. This does not
-    end your turn.\nSecond you can use activate skills, which will do something and
-    then end your turn."
+  m_Text: "Welcome to <color=purple>Adaptive Slime!</color>\r\nYour goal is to survive
+    and eventually face of against a <color=red>dragon</color>, to do this you defeat
+    enemies in your way.\nDefeated enemies become part of your power. You gain a bit
+    of their <color=yellow>stats</color> and might gain one of their <color=yellow>skills</color>.\r\nThough
+    even as you grow <color=red>stronger</color> your body becomes tired making you
+    <color=red>weaker</color> until you <color=yellow>rest</color>.\nCareful though
+    you only have <color=red>3</color> opporunities to <color=yellow>rest</color>,
+    after which you will fight the dragon. So choose when to wisely.\r\nDuring combat
+    you have two things to do first you can once per turn <color=yellow>Readapt</color>
+    by clicking one equipped and \none unequipped skill to swap which ones bonus you
+    recieve. This does not end your turn.\r\nSecond you can use activate skills, which
+    will do something and then end your turn."
 --- !u!222 &1474752712
 CanvasRenderer:
   m_ObjectHideFlags: 0
