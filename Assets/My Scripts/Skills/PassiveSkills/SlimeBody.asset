@@ -23,7 +23,7 @@ MonoBehaviour:
   crushResistance: 0.2
   slashResistance: 1
   pierceResistance: 1
-  bleedResistance: 0.1
+  bleedResistance: 1
   poisonResistance: 1
   bleedDurationBonus: 0
   poisonDurationBonus: 0

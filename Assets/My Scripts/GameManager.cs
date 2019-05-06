@@ -165,6 +165,7 @@ public class GameManager : MonoBehaviour
             {
                 worldText.text += "\n You stole <color=yellow>" + enemySkill.skillName + "</color> from " + currentEnemy.unitBase.unitName;
                 ActivatableSkillBase tempSkill = Instantiate(enemySkill);
+                tempSkill.cooldownTimer = 0;
                 player.unitBase.AddSkillToActivatableSkills(tempSkill);
                 
                 player.AddActivatableButton(tempSkill);
