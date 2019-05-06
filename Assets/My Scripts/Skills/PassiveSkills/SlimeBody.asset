@@ -14,11 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillName: Slime Body
   description: A slimes body is fluid and can absorb almost all crush damage taken.
-    It also closes wounds quickly making bleed damage less threatening.
-  attackPower: 0
-  attackPowerPercent: 1
-  agility: 0
-  agilityPercent: 1
+  abilityPower: 0
+  abilityPowerPercent: 1
   defence: 0
   defencePercent: 1
   health: 0

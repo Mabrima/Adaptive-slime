@@ -56,6 +56,14 @@ public class UnitBase : ScriptableObject
         AddInitialSkillsToOffCooldown();
     }
 
+    public void InitializeWithoutPassives()
+    {
+        MakeActivatablesIntoCopies();
+        activatablesOffCooldown = new List<ActivatableSkillBase>();
+        activatablesOnCooldown = new List<ActivatableSkillBase>();
+        AddInitialSkillsToOffCooldown();
+    }
+
     public void ActivatePassives()
     {
         foreach (PassiveSkillBase passive in passives)

@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
     private PassiveSkillBase unequipedSkillToSwap;
     private PassiveSkillBase equipedSkillToSwap;
 
+    [Header("EmptySkill")]
+    public PassiveSkillBase emptySkill;
+
     public bool hasReadapted = false;
 
     private float maxHealthBank = 0;
@@ -37,7 +40,7 @@ public class Player : MonoBehaviour
         for (int i = 0; i < unitBase.GetActivatables().Count; i++)
         {
             Button tempButton = Instantiate(buttonBase, activateablesButtons.transform);
-            tempButton.transform.localPosition = new Vector3(0, 90 - 35 * i, 0);
+            tempButton.transform.localPosition = new Vector3(0, 180 - 35 * i, 0);
             tempButton.GetComponentInChildren<Text>().text = unitBase.GetActivatables()[i].skillName;
             tempButton.GetComponent<SkillButtonHandler>().activeHolder = unitBase.GetActivatables()[i];
         }
@@ -61,7 +64,7 @@ public class Player : MonoBehaviour
         for (int i = 0; i < inactiveEquipables.Count; i++)
         {
             Button tempButton = Instantiate(buttonBase, inactiveEquipablesButtons.transform);
-            tempButton.transform.localPosition = new Vector3(0, 90 - 35 * i, 0);
+            tempButton.transform.localPosition = new Vector3(0, 80 - 35 * i, 0);
             tempButton.GetComponentInChildren<Text>().text = inactiveEquipables[i].skillName;
             tempButton.GetComponent<SkillButtonHandler>().passiveHolder = inactiveEquipables[i];
         }
@@ -69,7 +72,7 @@ public class Player : MonoBehaviour
         for (int i = 0; i < activeEquipables.Count; i++)
         {
             Button tempButton = Instantiate(buttonBase, activeEquipablesButtons.transform);
-            tempButton.transform.localPosition = new Vector3(0, 90 - 35 * i, 0);
+            tempButton.transform.localPosition = new Vector3(0, 80 - 35 * i, 0);
             tempButton.GetComponentInChildren<Text>().text = activeEquipables[i].skillName;
             tempButton.GetComponent<SkillButtonHandler>().passiveHolder = activeEquipables[i];
         }
@@ -78,7 +81,7 @@ public class Player : MonoBehaviour
     public void AddActivatableButton(ActivatableSkillBase skill)
     {
         Button tempButton = Instantiate(buttonBase, activateablesButtons.transform);
-        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (activateablesButtons.transform.childCount-1), 0);
+        tempButton.transform.localPosition = new Vector3(0, 180 - 35 * (activateablesButtons.transform.childCount-1), 0);
         tempButton.GetComponentInChildren<Text>().text = skill.skillName;
         tempButton.GetComponent<SkillButtonHandler>().activeHolder = skill;
     }
@@ -86,15 +89,21 @@ public class Player : MonoBehaviour
     public void AddActiveEquipButton(PassiveSkillBase skill)
     {
         Button tempButton = Instantiate(buttonBase, activeEquipablesButtons.transform);
-        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (activeEquipablesButtons.transform.childCount-1), 0);
+        tempButton.transform.localPosition = new Vector3(0, 80 - 35 * (activeEquipablesButtons.transform.childCount-1), 0);
         tempButton.GetComponentInChildren<Text>().text = skill.skillName;
         tempButton.GetComponent<SkillButtonHandler>().passiveHolder = skill;
+    }
+
+    public void AddEmptyActiveEquipButton()
+    {
+        activeEquipables.Add(emptySkill);
+        AddActiveEquipButton(emptySkill);
     }
 
     public void AddInactiveEquipButton(PassiveSkillBase skill)
     {
         Button tempButton = Instantiate(buttonBase, inactiveEquipablesButtons.transform);
-        tempButton.transform.localPosition = new Vector3(0, 90 - 35 * (inactiveEquipablesButtons.transform.childCount-1), 0);
+        tempButton.transform.localPosition = new Vector3(0, 80 - 35 * (inactiveEquipablesButtons.transform.childCount-1), 0);
         tempButton.GetComponentInChildren<Text>().text = skill.skillName;
         tempButton.GetComponent<SkillButtonHandler>().passiveHolder = skill;
     }
@@ -209,12 +218,15 @@ public class Player : MonoBehaviour
 
         if (unequipedSkillToSwap != null && equipedSkillToSwap != null)
         {
+            if (equipedSkillToSwap.skillName != "Empty Equip Slot")
+            {
+                inactiveEquipables.Add(equipedSkillToSwap);
+                equipedSkillToSwap.RemoveBonus(unitBase);
+            }
             activeEquipables.Remove(equipedSkillToSwap);
             activeEquipables.Add(unequipedSkillToSwap);
             inactiveEquipables.Remove(unequipedSkillToSwap);
-            inactiveEquipables.Add(equipedSkillToSwap);
 
-            equipedSkillToSwap.RemoveBonus(unitBase);
             unequipedSkillToSwap.GiveBonus(unitBase);
 
             GameManager.instance.worldText.text += '\n' + "Swapped " + equipedSkillToSwap.skillName + " with " + unequipedSkillToSwap.skillName;

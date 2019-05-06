@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Slash
   m_EditorClassIdentifier: 
   skillName: Slash
-  description: Slash with fang or sword to inflict slashing damage on your opponent.
+  description: Slash your opponent with claw or sword.
   baseDmg: 8
   scalingDmg: 0.7
   basePoison: 0

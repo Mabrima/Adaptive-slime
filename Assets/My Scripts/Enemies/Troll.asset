@@ -16,6 +16,7 @@ MonoBehaviour:
   unitArea: 0
   passives:
   - {fileID: 11400000, guid: 600606bc733f2714b996a11129195c67, type: 2}
+  - {fileID: 11400000, guid: a936fae4425bb9843b6bf973b74bf9ed, type: 2}
   activatables:
   - {fileID: 11400000, guid: 194f7def196bdda469043172ad44f182, type: 2}
   - {fileID: 11400000, guid: 108fe24b4df618c45875be10298881d6, type: 2}
@@ -23,9 +24,9 @@ MonoBehaviour:
   currentHealth: 200
   abilityPower: 10
   defence: 0
-  pierceResistance: 0.8
+  pierceResistance: 1.4
   slashResistance: 0.6
-  crushResistance: 1.4
+  crushResistance: 0.8
   bleedResistance: 0.6
   poisonResistance: 1.2
   poisonedDmg: 0

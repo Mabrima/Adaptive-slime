@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Reform
   m_EditorClassIdentifier: 
   skillName: Reform
-  description: Reform to regain some lost hp over several turns. You cannot readapt
-    during this time.
+  description: Reform to regain some lost hp over several turns.
   baseDmg: 0
   scalingDmg: 0
   basePoison: 0
@@ -23,12 +22,12 @@ MonoBehaviour:
   baseBleed: 0
   scalingBleed: 0
   bleedDuration: 0
-  cooldown: 10
+  cooldown: 12
   cooldownTimer: 0
   dmgType: 0
   target: 2
-  baseHeal: 5
-  scalingHeal: 0.1
-  baseHealOverTime: 5
-  scalingHealOverTime: 0.1
-  healDuration: 5
+  baseHeal: 10
+  scalingHeal: 0.2
+  baseHealOverTime: 4
+  scalingHealOverTime: 0.08
+  healDuration: 4

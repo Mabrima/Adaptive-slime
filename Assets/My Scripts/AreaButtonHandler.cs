@@ -23,7 +23,7 @@ public class AreaButtonHandler : ButtonHoverOver, IPointerClickHandler
     {
         if (!isCamp && !isContinue)
         {
-            area = (Area)Random.Range(0, 5);
+            area = (Area)Random.Range(0, 4);
             gameObject.GetComponentInChildren<Text>().text = area.ToString();
         }
     }
@@ -33,6 +33,7 @@ public class AreaButtonHandler : ButtonHoverOver, IPointerClickHandler
     {
         if (isCamp)
         {
+            GameManager.instance.destinations.SetActive(false);
             GameManager.instance.GoToCamp();
             return;
         }
@@ -56,7 +57,7 @@ public class AreaButtonHandler : ButtonHoverOver, IPointerClickHandler
 
         if (isContinue)
         {
-            descriptionText.text = "continue";
+            descriptionText.text = "Stay in the " + GameManager.instance.currentArea;
             //ContinueDescription();
             return;
         }
@@ -64,16 +65,16 @@ public class AreaButtonHandler : ButtonHoverOver, IPointerClickHandler
         switch (area)
         {
             case Area.MOUNTAIN:
-                descriptionText.text = "mountain";
+                descriptionText.text = "Mountain, home of some 'intelligent' races";
                 break;
             case Area.DESERT:
-                descriptionText.text = "desert";
+                descriptionText.text = "Desert, home of nasty venomous critters";
                 break;
             case Area.FORREST:
-                descriptionText.text = "forrest";
+                descriptionText.text = "Forrest, mostly housing weak creatures. Though occasionally others pass by.";
                 break;
             case Area.LAKE:
-                descriptionText.text = "lake";
+                descriptionText.text = "Lake, creatures living here have developed increadible defences.";
                 break;
             default:
                 break;

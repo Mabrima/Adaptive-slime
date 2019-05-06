@@ -22,9 +22,9 @@ MonoBehaviour:
   currentHealth: 80
   abilityPower: 10
   defence: 4
-  pierceResistance: 1
+  pierceResistance: 1.2
   slashResistance: 1
-  crushResistance: 1
+  crushResistance: 0.6
   bleedResistance: 1
   poisonResistance: 1
   poisonedDmg: 0

@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class ButtonHoverOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public Player player;
     public Text descriptionText;
 
     private readonly string defaultDescription = "Hover over a skill to see its description.";
@@ -16,11 +15,8 @@ public class ButtonHoverOver : MonoBehaviour, IPointerEnterHandler, IPointerExit
     /// </summary>
     /// <param name="eventData"></param>
 
-
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-
-
     }
 
     public void OnPointerExit(PointerEventData eventData)

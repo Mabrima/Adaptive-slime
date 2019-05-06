@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public enum State { NULL, PLAYER_TURN, ENEMY_TURN, WORLD, GAME_OVER, END_OF_TURN, HANDLE_PLAYER_CHOICE }
+public enum State { NULL, PLAYER_TURN, ENEMY_TURN, WORLD, GAME_OVER, END_OF_TURN, HANDLE_PLAYER_CHOICE, GAME_WIN }
 public enum DmgTypes { NULL, SLASH, PIERCE, CRUSH, BLEED, POISON }
 
 public class GameManager : MonoBehaviour
 {
 
-    Player player;
+    public Player player;
     public Text worldText;
     public Text playerHealthText;
     public Text enemyHealthText;
@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     public EnemyBase[] enemies;
     public EnemyBase currentEnemy;
     private int turn;
+    private int enemiesSinceLastCamp = 0;
+    private int enemiesBeforeForcedCamp = 10;
+
     private Area starterArea = Area.FORREST;
     public Area currentArea;
 
@@ -60,22 +63,20 @@ public class GameManager : MonoBehaviour
         turn = 1;
 
         currentArea = starterArea;
-        currentState = State.PLAYER_TURN;
-        FindNewEnemy(starterArea);
+        NextCombat();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (enemiesSinceLastCamp > enemiesBeforeForcedCamp)
         {
-            SceneManager.LoadScene(0);
-
-            Invoke("GameStartup", .1f);
+            worldText.text += "\n <color=magenta>Night falls and you are forced to make camp</color>";
+            GoToCamp();
         }
         //WIN/LOSE
         if (currentState == State.ENEMY_TURN && currentEnemy.unitBase.currentHealth <= 0)
         {
-            enemyHealthText.text = "EnemyHealth: 0";
+            enemyHealthText.text = "Enemy health: 0";
             worldText.text += '\n' + "<color=yellow>Well done!</color> You have slain " + currentEnemy.unitBase.unitName;
             player.BankStats(currentEnemy.GetOriginalBase());
             AttemptStealSkill();
@@ -107,8 +108,8 @@ public class GameManager : MonoBehaviour
             worldText.text += '\n' + "End of turn " + turn; 
             currentEnemy.unitBase.EndOfTurnEffects();
             player.unitBase.EndOfTurnEffects();
-            playerHealthText.text = "PlayerHealth: " + Mathf.CeilToInt(player.unitBase.currentHealth);
-            enemyHealthText.text = "EnemyHealth: " + Mathf.CeilToInt(currentEnemy.unitBase.currentHealth);
+            playerHealthText.text = "Player health: " + Mathf.CeilToInt(player.unitBase.currentHealth);
+            enemyHealthText.text = "Enemy health: " + Mathf.CeilToInt(currentEnemy.unitBase.currentHealth);
             player.hasReadapted = false;
 
             player.unitBase.DecrementCooldowns();
@@ -117,6 +118,13 @@ public class GameManager : MonoBehaviour
             turn++;
 
             currentState = State.PLAYER_TURN;
+        }
+
+        if (currentState == State.GAME_WIN)
+        {
+            worldText.text = "The Metamorph has been <color=red>vanquished!</color> \n <color=yellow>You Win!</color>";
+            player.TurnOffButtons();
+            currentState = State.GAME_OVER;
         }
     }
 
@@ -134,6 +142,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void Restart()
+    {
+        SceneManager.LoadScene(0);
+        Invoke("GameStartup", .1f);
+    }
+
     private bool AttemptStealActive()
     {
         bool notKnownSkill = true;
@@ -149,6 +163,7 @@ public class GameManager : MonoBehaviour
             }
             if (notKnownSkill && Random.Range(0, 2) > 0)
             {
+                worldText.text += "\n You stole <color=yellow>" + enemySkill.skillName + "</color> from " + currentEnemy.unitBase.unitName;
                 ActivatableSkillBase tempSkill = Instantiate(enemySkill);
                 player.unitBase.AddSkillToActivatableSkills(tempSkill);
                 
@@ -164,7 +179,6 @@ public class GameManager : MonoBehaviour
         bool notKnownSkill = true;
         foreach (PassiveSkillBase enemySkill in currentEnemy.unitBase.GetPassives())
         {
-            Debug.Log("Attempting to steal passive " + enemySkill.skillName);
             foreach (PassiveSkillBase playerSkill in player.unitBase.GetPassives())
             {
                 if (playerSkill.skillName == enemySkill.skillName)
@@ -175,7 +189,7 @@ public class GameManager : MonoBehaviour
             }
             if (notKnownSkill && Random.Range(0, 2) > 0)
             {
-                Debug.Log("Attempting to add skill");
+                worldText.text += "\n You stole <color=yellow>" + enemySkill.skillName + "</color> from " + currentEnemy.unitBase.unitName;
                 player.unitBase.GetPassives().Add(enemySkill);
                 player.inactiveEquipables.Add(enemySkill);
                 player.AddInactiveEquipButton(enemySkill);
@@ -236,7 +250,8 @@ public class GameManager : MonoBehaviour
 
         currentEnemy.ResetEnemy();
         worldText.text += '\n' + "You face a " + currentEnemy.unitBase.unitName;
-        enemyHealthText.text = "EnemyHealth: " + currentEnemy.unitBase.currentHealth.ToString();
+        enemyHealthText.text = "Enemy health: " + currentEnemy.unitBase.currentHealth.ToString();
+        enemiesSinceLastCamp++;
     }
 
 
@@ -249,7 +264,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            worldText.text += '\n' + usingName + " used " + skillName + " it <color=red>dealt</color> " + (int)dmg + " dmg to " + defendingName;
+            worldText.text += '\n' + "The " + usingName + " used " + skillName + " it <color=red>dealt</color> " + (int)dmg + " dmg to " + defendingName;
         }
     }
 
@@ -277,16 +292,32 @@ public class GameManager : MonoBehaviour
     public void GoToCamp()
     {
         player.ApplyBank();
+        player.unitBase.ResetCooldowns();
+        player.UpdateButtonCooldownText();
+        player.AddEmptyActiveEquipButton();
+        player.unitBase.currentHealth = player.unitBase.maxHealth;
+        enemiesSinceLastCamp = 0;
         campUsesLeft--;
-        worldText.text += '\n' + "You now only have <color=yellow>" + campUsesLeft + "</color> times left to camp before you face your ultimate <color=#f97522>foe</color>";
+        if (campUsesLeft != 0)
+        {
+            worldText.text += '\n' + "You now only have <color=yellow>" + campUsesLeft + "</color> times left to camp before you face your ultimate <color=#f97522>foe</color>";
+            NextCombat();
+        }
+        else
+        {
+            currentEnemy.GenerateMetaMorph();
+            worldText.text += '\n' + "You face a " + currentEnemy.unitBase.unitName + "\n <color=red>better start praying</color>";
+            enemyHealthText.text = "Enemy health: " + currentEnemy.unitBase.currentHealth.ToString();
+            currentState = State.PLAYER_TURN;
+        }
+
     }
 
     public void NextCombat()
     {
         FindNewEnemy(currentArea);
         currentState = State.PLAYER_TURN;
-
-        
     }
+
 
 }

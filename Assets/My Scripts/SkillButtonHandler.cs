@@ -18,18 +18,13 @@ public class SkillButtonHandler : ButtonHoverOver, IPointerClickHandler
             return;
         }
 
-        if (player == null)
-        {
-            player = FindObjectOfType<Player>();
-        }
-
         if (activeHolder != null)
         {
             GameManager.instance.PlayerUseSkill(activeHolder);
         }
         else if (passiveHolder != null)
         {
-            player.Readapting(passiveHolder);
+            GameManager.instance.player.Readapting(passiveHolder);
         }
 
     }

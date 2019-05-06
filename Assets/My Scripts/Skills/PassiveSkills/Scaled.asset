@@ -13,12 +13,9 @@ MonoBehaviour:
   m_Name: Scaled
   m_EditorClassIdentifier: 
   skillName: Scaled
-  description: A scaled exterior makes slashing attacks merely glance off you dealing
-    little damage.
-  attackPower: 0
-  attackPowerPercent: 1
-  agility: 0
-  agilityPercent: 1
+  description: A scaled exterior makes slashing attacks merely glance off you.
+  abilityPower: 0
+  abilityPowerPercent: 1
   defence: 2
   defencePercent: 1.1
   health: 0

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4fd98169555184e87757a61efb779c, type: 3}
+  m_Name: HeremitCrab
+  m_EditorClassIdentifier: 
+  unitName: <color=#f97522>Heremit Crab</color>
+  unitArea: 3
+  passives:
+  - {fileID: 11400000, guid: 433f320dc465d3446a38bbd9db6d5b90, type: 2}
+  activatables:
+  - {fileID: 11400000, guid: e93c186b1efa4ec43834b27669fcfbbf, type: 2}
+  - {fileID: 11400000, guid: e93c186b1efa4ec43834b27669fcfbbf, type: 2}
+  maxHealth: 50
+  currentHealth: 50
+  abilityPower: 14
+  defence: 8
+  pierceResistance: 0.9
+  slashResistance: 0.7
+  crushResistance: 1.4
+  bleedResistance: 1
+  poisonResistance: 1
+  poisonedDmg: 0
+  poisonedDuration: 0
+  bleedingDmg: 0
+  bleedingDuration: 0
+  healingOverTimeAmount: 0
+  healingDuration: 0
+  poisionBonusDuration: 0
+  bleedBonusDuration: 0
+  healingBonusDuration: 0

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Wolf
   m_EditorClassIdentifier: 
   unitName: <color=#f97522>Wolf</color>
+  unitArea: 2
   passives:
   - {fileID: 11400000, guid: d22edd86d89c72447b412d83eb2ff55c, type: 2}
   - {fileID: 11400000, guid: 35488436981291346b698fb8816892ec, type: 2}
@@ -23,8 +24,8 @@ MonoBehaviour:
   currentHealth: 70
   abilityPower: 10
   defence: 6
-  pierceResistance: 1
-  slashResistance: 1
+  pierceResistance: 1.6
+  slashResistance: 0.8
   crushResistance: 1
   bleedResistance: 1
   poisonResistance: 1
